@@ -323,11 +323,19 @@ async function demonstrateDomination() {
 
 // Main execution logic
 async function main() {
-    if (isJSONMode || args.search !== 'software engineer' || args.location !== 'San Francisco, CA') {
+    // CLI mode if any explicit arguments provided or JSON mode requested
+    const isCliMode = isJSONMode || process.argv.length > 2;
+    
+    if (isCliMode) {
         // CLI mode - execute scraping with provided arguments
         const scraper = new CrawleeIndeedScraper();
         try {
-            const results = await scraper.scrapeJobs();
+            const maxPages = Math.ceil(parseInt(args.max, 10) / 10) || 3;
+            const results = await scraper.scrapeJobs(
+                args.search,
+                args.location,
+                maxPages
+            );
             
             if (isJSONMode) {
                 console.log(JSON.stringify({

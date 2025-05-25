@@ -102,17 +102,23 @@ async def get_scraping_status():
     - Last successful scrape time
     """
     try:
-        # Check if Node.js is available
-        import subprocess
-        result = subprocess.run(
-            ["node", "--version"], 
-            capture_output=True, 
-            text=True, 
-            timeout=10
-        )
+        # Check if Node.js is available (async)
+        import asyncio, subprocess
+        try:
+            proc = await asyncio.create_subprocess_exec(
+                "node", "--version",
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+            stdout, _ = await asyncio.wait_for(proc.communicate(), timeout=10)
+            result_returncode = proc.returncode
+            result_stdout = stdout.decode()
+        except asyncio.TimeoutError:
+            result_returncode = 1
+            result_stdout = ""
         
-        node_available = result.returncode == 0
-        node_version = result.stdout.strip() if node_available else None
+        node_available = result_returncode == 0
+        node_version = result_stdout.strip() if node_available else None
         
         # Check if scraper script exists
         scraper_exists = crawlee_bridge.scraper_script.exists()
@@ -128,14 +134,11 @@ async def get_scraping_status():
         )
         
     except Exception as e:
-        logger.error(f"Status check failed: {e}")
-        return ScrapeStatusResponse(
-            status="error",
-            crawlee_available=False,
-            node_version=None,
-            scraper_path=str(crawlee_bridge.scraper_script),
-            last_scrape=None
-        )
+        logger.error("Status check failed: %s", e)
+        raise HTTPException(
+            status_code=503,
+            detail=f"Scraping status unavailable: {e}"
+        ) from e
 
 
 @router.post("/jobs", response_model=ScrapeJobsResponse)
