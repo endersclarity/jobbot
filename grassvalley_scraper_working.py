@@ -101,7 +101,7 @@ def scrape_grassvalley_jobs_enhanced():
         print(f"📁 Data saved to: {filepath}")
         
         # Print summary
-        print(f"\n📊 Scraping Summary:")
+        print("\n📊 Scraping Summary:")
         print(f"   Location: {location} (15 mile radius)")
         print(f"   Query: {query}")
         print(f"   Status: {response.status_code}")

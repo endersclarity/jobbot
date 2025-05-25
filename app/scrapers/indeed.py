@@ -11,8 +11,8 @@ import json
 import random
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
-from urllib.parse import urlencode, quote_plus
+from typing import Dict, List
+from urllib.parse import urlencode
 import logging
 
 
@@ -174,7 +174,7 @@ def main():
     scraper = IndeedScraper()
     results = scraper.scrape_multiple_pages(query, location, max_pages)
 
-    print(f"\nScraping completed!")
+    print("\nScraping completed!")
     print(f"- Query: '{query}'")
     print(f"- Location: '{location}'")
     print(f"- Pages scraped: {len(results)}")

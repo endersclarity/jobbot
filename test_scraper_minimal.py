@@ -44,7 +44,7 @@ def test_scraper_minimal():
         with open(test_file, 'w') as f:
             json.dump(test_result, f, indent=2)
             
-        print(f"✅ Test completed:")
+        print("✅ Test completed:")
         print(f"   Status: {test_result['status_code']}")
         print(f"   Response size: {test_result['response_size_chars']} chars")
         print(f"   Test file: {test_file}")

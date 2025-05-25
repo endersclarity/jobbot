@@ -3,11 +3,8 @@ Browser-based scraper using Puppeteer MCP for JavaScript-heavy sites
 Fallback when basic requests get blocked (403 errors)
 """
 
-import json
-import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
 
 
 class BrowserScraper:

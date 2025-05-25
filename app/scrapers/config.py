@@ -5,7 +5,7 @@ Manages search terms, locations, rate limits, and scraping parameters
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import List, Optional
 from dataclasses import dataclass, asdict
 
 

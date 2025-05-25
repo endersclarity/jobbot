@@ -153,4 +153,4 @@ if __name__ == "__main__":
     
     print("\n🎯 Ready to implement Puppeteer scraping!")
     print("Next: Use Puppeteer MCP to navigate and extract job data")
-    print(f"Target: Jobs within 15 miles of Grass Valley, CA")
+    print("Target: Jobs within 15 miles of Grass Valley, CA")

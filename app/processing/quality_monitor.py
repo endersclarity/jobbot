@@ -6,10 +6,9 @@ to ensure high-quality job data imports.
 """
 
 import json
-from datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional, Tuple
+from datetime import datetime
+from typing import Dict, Any, List
 from collections import Counter
-import statistics
 import logging
 
 logger = logging.getLogger(__name__)
