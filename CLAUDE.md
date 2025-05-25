@@ -96,40 +96,56 @@ Brief overview of changes and purpose
 
 ## Phase-Specific Guidelines
 
-### Phase 1: Foundation (COMPLETE)
+### ✅ Phase 1: Foundation (COMPLETE)
 - Focus on solid architecture and database design
 - Comprehensive testing framework setup
 - Development workflow establishment
 
-### Phase 2: Core API
+### ✅ Phase 2: Core API (COMPLETE)
 - Complete CRUD operations for all models
 - Proper error handling and validation
 - API documentation and testing
 
-### Phase 3: Web Scraping
-- Respectful scraping with rate limiting
-- Anti-detection measures and proxy rotation
-- Robust error handling for network issues
+### 🚧 Phase 3: Strategic Pivot & Data Collection (IN PROGRESS)
+**3A: Raw Data Collection** ✅ Complete
+- Token-efficient scraping without LLM processing
+- BrowserMCP anti-detection measures bypassing 403 errors
+- Rate limiting and intelligent request delays
+- Structured data storage in scraped_data/ directory
 
-### Future Phases
-- Maintain backwards compatibility
-- Performance optimization for scale
-- Security hardening for production
+**3B: Offline Processing Pipeline** 🚧 Current Focus
+- HTML parsing and data extraction without token burn
+- Duplicate detection and deduplication algorithms
+- Data normalization and field standardization
+- Batch processing and database import automation
+
+### 📋 Phase 4: Business Intelligence & Market Creation (PLANNED)
+**Strategic Transformation**: JobBot → BusinessBot for market creation
+- Local company research and automation opportunity identification
+- Value proposition generation and proof-of-concept creation
+- Outreach automation and business relationship management
+- Transform from reactive job hunting to proactive market creation
 
 ## MCP Integration Standards
 
-### Required MCP Servers
-- **postgres**: Database operations and queries
-- **filesystem**: File management and storage
-- **fetch**: HTTP requests and API calls
-- **puppeteer**: Web scraping automation
-- **gmail**: Email automation and monitoring
+### Required MCP Servers ✅ Installed and Functional
+- **postgres**: Database operations and complex queries
+- **filesystem**: File management and scraped data storage
+- **fetch**: HTTP requests and API integrations
+- **puppeteer**: Advanced web scraping automation (backup)
+- **gmail**: Email automation and response monitoring
+- **browsermcp**: Real browser automation with anti-detection ✅ PRIMARY SCRAPER
+- **desktop-commander**: File operations and command execution
+- **exa**: Web search and research capabilities
 
 ### MCP Usage Guidelines
-- Use MCP servers for external system integration
-- Maintain fallback mechanisms for MCP failures
-- Log all MCP operations for debugging
-- Test MCP integrations thoroughly
+- **Primary Scraping**: Use browsermcp for all job board scraping (bypasses 403 errors)
+- **Fallback Strategy**: Maintain puppeteer as backup scraping method
+- **Data Processing**: Use filesystem MCP for scraped data organization
+- **Business Intelligence**: Leverage exa for company research and market analysis
+- **Email Automation**: Gmail MCP for outreach campaigns and response monitoring
+- **Database Operations**: Postgres MCP for complex queries and business intelligence
+- **Development**: Desktop-commander for file operations and CLI automation
 
 ## Deployment Standards
 
