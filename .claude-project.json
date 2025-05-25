@@ -1,0 +1,120 @@
+{
+  "project": {
+    "name": "JobBot - Job Search Automation System",
+    "type": "python-fastapi",
+    "description": "Automated job search and application system evolving into business development automation platform",
+    "version": "1.5.0",
+    "status": "Phase 3B - HDTA Architecture Complete",
+    "repository": "https://github.com/endersclarity/jobbot",
+    "current_branch": "feature/phase-3-job-site-analysis"
+  },
+  "architecture": {
+    "backend": "FastAPI + SQLAlchemy + Alembic",
+    "database": "PostgreSQL (production), SQLite (development)",
+    "scraping": "BrowserMCP + requests + BeautifulSoup",
+    "testing": "pytest with async support and coverage",
+    "deployment": "WSL development server (172.22.206.209:8000)"
+  },
+  "hdta_structure": {
+    "system_manifest": "memory-bank/system_manifest.md",
+    "modules": {
+      "api_core": "memory-bank/modules/module_api_core.md",
+      "scrapers": "memory-bank/modules/module_scrapers.md",
+      "database": "memory-bank/modules/module_database.md"
+    },
+    "implementations": {
+      "strategic_pivot": "memory-bank/implementations/implementation_strategic_pivot.md",
+      "phase_3b": "memory-bank/implementations/implementation_phase_3b.md"
+    },
+    "roadmaps": {
+      "project_roadmap": "memory-bank/roadmaps/project_roadmap.md"
+    }
+  },
+  "sync_targets": {
+    "active_context": "activeContext.md",
+    "changelog": "changelog.md",
+    "user_profile": "userProfile.md",
+    "project_standards": "CLAUDE.md",
+    "instructions": "INSTRUCTIONS.md"
+  },
+  "file_mappings": {
+    "context_files": [
+      "activeContext.md",
+      "changelog.md", 
+      "userProfile.md"
+    ],
+    "documentation": [
+      "README.md",
+      "INSTRUCTIONS.md",
+      "development_roadmap.md",
+      "comprehensive_design.md"
+    ],
+    "memory_bank": [
+      "memory-bank/system_manifest.md",
+      "memory-bank/modules/",
+      "memory-bank/implementations/",
+      "memory-bank/roadmaps/"
+    ],
+    "project_config": [
+      "CLAUDE.md",
+      "requirements.txt",
+      "pytest.ini",
+      "alembic.ini"
+    ]
+  },
+  "commands": {
+    "test": "pytest",
+    "lint": "flake8 app/ tests/",
+    "format": "black app/ tests/ && isort app/ tests/",
+    "type_check": "mypy app/",
+    "run_dev": "uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    "db_migrate": "alembic upgrade head",
+    "db_revision": "alembic revision --autogenerate"
+  },
+  "mcp_servers": {
+    "enabled": [
+      "desktop-commander",
+      "sequential-thinking", 
+      "exa",
+      "browsermcp",
+      "context7"
+    ],
+    "primary_scraper": "browsermcp",
+    "fallback_scraper": "puppeteer"
+  },
+  "development": {
+    "current_phase": "Phase 3B - Offline Processing Pipeline",
+    "completed_phases": [
+      "Phase 1 - Foundation & Database Setup",
+      "Phase 2 - Core API & Basic Job Management", 
+      "Phase 3A - Raw Data Collection"
+    ],
+    "next_milestone": "Implement Phase 3B offline processing pipeline",
+    "strategic_direction": "Transform JobBot → BusinessBot for market creation"
+  },
+  "git_workflow": {
+    "main_branch": "main",
+    "feature_prefix": "feature/",
+    "commit_format": "conventional",
+    "requires_pr": true,
+    "code_review": "codeRABBIT",
+    "auto_merge": false
+  },
+  "quality_gates": {
+    "test_coverage_min": 90,
+    "linting_required": true,
+    "type_checking_required": true,
+    "pr_review_required": true,
+    "ci_checks_required": true
+  },
+  "metadata": {
+    "created": "2025-05-25T18:45:00Z",
+    "last_updated": "2025-05-25T19:00:00Z",
+    "last_sync": "2025-05-25T19:00:00Z",
+    "last_load": "2025-05-25T19:15:00Z",
+    "architect_version": "1.0",
+    "hdta_complete": true,
+    "sync_sessions": 2,
+    "last_commit": "3cb3178"
+  }
+}
