@@ -21,7 +21,8 @@ Automated end-to-end job search pipeline that:
 
 ## Current State
 - **Phase**: ✅ PHASE 1 COMPLETE - Foundation & Database Setup
-- **Next Action**: Begin Phase 2 - Core API & Basic Job Management  
+- **Current Branch**: `feature/phase-2-api` 
+- **Next Action**: Begin Phase 2 - Core API & Basic Job Management with codeRABBIT workflow
 - **Blockers**: None
 - **Decisions Made**: 
   - Technology stack: FastAPI + PostgreSQL + React
@@ -29,6 +30,8 @@ Automated end-to-end job search pipeline that:
   - 9-phase incremental development plan created
   - Testing framework: pytest with async support and coverage
   - Development workflow: Makefile with standardized commands
+  - **NEW**: codeRABBIT review process for all pull requests
+  - **NEW**: Project-specific CLAUDE.md with quality standards
 - **Current Capabilities**: 
   - ✅ Complete Python project structure with proper packaging
   - ✅ Production-ready FastAPI application with health checks
