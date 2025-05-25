@@ -67,7 +67,7 @@ Brief overview of changes and purpose
 - Performance tests for database queries
 
 #### Security Standards
-- Never commit secrets or API keys to repository
+- Never commit secrets or API keys to a repository
 - Use environment variables for all configuration
 - Validate and sanitize all user inputs
 - Follow OWASP security guidelines

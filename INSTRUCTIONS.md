@@ -13,7 +13,7 @@
 
 1. **Clone Repository**
    ```bash
-   git clone https://github.com/endersclarity/jobbot
+   git clone [https://github.com/endersclarity/jobbot](https://github.com/endersclarity/jobbot)
    cd jobbot
    ```
 
@@ -251,9 +251,9 @@ uvicorn app.main:app --ssl-keyfile=key.pem --ssl-certfile=cert.pem
 ## 📖 API Documentation
 
 ### Interactive Documentation
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI JSON**: http://localhost:8000/openapi.json
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+- **OpenAPI JSON**: [http://localhost:8000/openapi.json](http://localhost:8000/openapi.json)
 
 ### API Testing
 ```bash

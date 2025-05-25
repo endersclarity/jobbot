@@ -1,7 +1,7 @@
 """
 Job-related database models
 """
-from sqlalchemy import Column, Integer, String, Text, DateTime, Date, Boolean, CheckConstraint
+from sqlalchemy import Column, Integer, String, Text, DateTime, Date, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.core.database import Base

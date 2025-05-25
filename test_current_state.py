@@ -4,9 +4,7 @@ Quick test script to demonstrate current JobBot functionality
 Run this to see what's working right now!
 """
 import requests
-import json
 import time
-from datetime import datetime
 
 BASE_URL = "http://localhost:8000"
 
@@ -78,7 +76,7 @@ def test_endpoints():
             print(f"   ✅ Job created successfully! ID: {job_id}")
             
             # Test 6: Retrieve the created job
-            print(f"\n6. Testing Job Retrieval...")
+            print("\n6. Testing Job Retrieval...")
             get_response = requests.get(f"{BASE_URL}/api/v1/jobs/{job_id}")
             if get_response.status_code == 200:
                 job_data = get_response.json()

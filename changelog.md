@@ -193,7 +193,7 @@ job-search-automation/
 
 ### Added - Live API Testing
 - **Server Accessibility**: WSL networking configured for Windows browser access
-- **Interactive Documentation**: Swagger UI accessible at http://172.22.206.209:8000/docs
+- **Interactive Documentation**: Swagger UI accessible at [http://172.22.206.209:8000/docs](http://172.22.206.209:8000/docs)
 - **API Validation**: CRUD operations tested and working via browser interface
 - **Desktop Commander Integration**: MCP server working for command execution
 
@@ -217,7 +217,7 @@ job-search-automation/
 
 ### Current State
 - **Branch**: `feature/phase-2-api` ready for completion
-- **Server**: Running and accessible at http://172.22.206.209:8000/docs
+- **Server**: Running and accessible at [http://172.22.206.209:8000/docs](http://172.22.206.209:8000/docs)
 - **Next Phase**: Phase 3A raw data collection without token consumption
 - **Architecture**: Optimized for scalable scraping with offline processing
 
