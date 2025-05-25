@@ -5,9 +5,9 @@ Test scraping Indeed with browser automation for Grass Valley, CA (15 mile radiu
 """
 
 import json
-import time
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlencode
 
 
 def test_puppeteer_indeed_scraper():
@@ -22,7 +22,8 @@ def test_puppeteer_indeed_scraper():
     location = "Grass Valley, CA"  # 15 mile radius will be set in Indeed's location filter
     
     # Indeed search URL with location
-    search_url = f"https://www.indeed.com/jobs?q={query.replace(' ', '+')}&l={location.replace(' ', '+').replace(',', '%2C')}"
+    params = {'q': query, 'l': location}
+    search_url = f"https://www.indeed.com/jobs?{urlencode(params)}"
     
     print(f"Target URL: {search_url}")
     print(f"Search: '{query}' within 15 miles of {location}")
@@ -62,6 +63,7 @@ def test_puppeteer_indeed_scraper():
     
     # Save test plan
     base_dir = Path(__file__).parent / "scraped_data" / "raw"
+    base_dir.mkdir(parents=True, exist_ok=True)
     test_file = base_dir / "puppeteer_test_plan_grassvalley.json"
     
     with open(test_file, 'w') as f:
@@ -87,7 +89,6 @@ Real browser automation to bypass 403 errors
 """
 
 import json
-import time
 from datetime import datetime
 from pathlib import Path
 
@@ -140,6 +141,7 @@ if __name__ == "__main__":
 '''
     
     script_path = Path(__file__).parent / "puppeteer_grassvalley_scraper.py"
+    script_path.parent.mkdir(parents=True, exist_ok=True)
     with open(script_path, 'w') as f:
         f.write(script_content)
         

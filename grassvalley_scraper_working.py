@@ -43,13 +43,6 @@ def scrape_grassvalley_jobs_enhanced():
     
     # Build URL for Grass Valley, CA search
     base_url = "https://www.indeed.com/jobs"
-    params = {
-        'q': query,
-        'l': location,
-        'radius': '15'  # 15 mile radius
-    }
-    
-    # Manual URL construction for better control
     url = f"{base_url}?q={quote_plus(query)}&l={quote_plus(location)}&radius=15"
     
     print(f"Target URL: {url}")
