@@ -33,6 +33,20 @@ class CrawleeIndeedScraper {
     }
 
     /**
+     * Generate realistic rotating user agents for anti-detection
+     */
+    generateRandomUA() {
+        const userAgents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15'
+        ];
+        return userAgents[Math.floor(Math.random() * userAgents.length)];
+    }
+
+    /**
      * Create enterprise-grade crawler with anti-detection
      */
     createCrawler() {
@@ -47,7 +61,7 @@ class CrawleeIndeedScraper {
                         '--disable-web-security',
                         '--disable-features=VizDisplayCompositor',
                         '--disable-blink-features=AutomationControlled',
-                        '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                        `--user-agent=${this.options.userAgent ?? this.generateRandomUA()}`
                     ]
                 }
             },
@@ -66,7 +80,6 @@ class CrawleeIndeedScraper {
                     await page.setViewportSize({ width: 1366, height: 768 });
                     await page.setExtraHTTPHeaders({
                         'Accept-Language': 'en-US,en;q=0.9',
-                        'Accept-Encoding': 'gzip, deflate, br',
                         'Cache-Control': 'no-cache',
                         'Pragma': 'no-cache',
                         'Sec-Fetch-Dest': 'document',
