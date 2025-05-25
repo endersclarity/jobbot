@@ -42,7 +42,7 @@ All notable changes to this project will be documented in this file.
 - Browser automation implementation using existing Puppeteer MCP
 - Integration with JobBot database for processed data import
 
-## [0.2.0] - 2025-05-24
+## [0.3.1] - 2025-05-24
 
 ### Added
 - **Comprehensive Phase 3 Todo List**: Created detailed 25-item todo breakdown for scraping implementation

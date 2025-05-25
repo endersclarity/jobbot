@@ -14,7 +14,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent / "app"))
 
 from scrapers.indeed import IndeedScraper
-from scrapers.config import ScraperConfigManager, ScrapingConfig
+from scrapers.config import ScraperConfigManager
 
 
 def main():

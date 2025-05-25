@@ -241,10 +241,10 @@ class QualityMonitor:
             )
 
         anomalies_by_type = anomalies.get("anomalies_by_type", {})
-        if anomalies_by_type.get("salary_anomalies", 0) > 5:
+        if anomalies_by_type.get("salary_anomaly", 0) > 5:
             recommendations.append("Multiple salary anomalies detected. Check salary parsing patterns.")
 
-        if anomalies_by_type.get("title_anomalies", 0) > 5:
+        if anomalies_by_type.get("title_anomaly", 0) > 5:
             recommendations.append("Job title anomalies found. Review title extraction and cleaning.")
 
         # Validation recommendations
