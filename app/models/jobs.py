@@ -9,8 +9,9 @@ from app.core.database import Base
 
 class Job(Base):
     """Job postings discovered through scraping or manual entry"""
+
     __tablename__ = "jobs"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False, index=True)
     company = Column(String(255), nullable=False, index=True)
@@ -30,10 +31,12 @@ class Job(Base):
     experience_level = Column(String(50), nullable=True, index=True)
     industry = Column(String(100), nullable=True, index=True)
     keywords = Column(Text, nullable=True)  # JSON-encoded searchable keywords array
-    status = Column(String(50), default='discovered', index=True)  # discovered, targeted, applied, rejected, interviewing, offer
-    
+    status = Column(
+        String(50), default="discovered", index=True
+    )  # discovered, targeted, applied, rejected, interviewing, offer
+
     # Relationships
     applications = relationship("Application", back_populates="job", cascade="all, delete-orphan")
-    
+
     def __repr__(self):
         return f"<Job(id={self.id}, title='{self.title}', company='{self.company}')>"

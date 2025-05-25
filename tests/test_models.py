@@ -72,7 +72,7 @@ def test_reference_model_creation(db_session: Session):
         company="Previous Company",
         email="john.doe@example.com",
         phone="555-1234",
-        relationship="Former colleague",
+        relationship_type="Former colleague",
         credibility_rating=9,
         notes="Excellent reference, very responsive"
     )

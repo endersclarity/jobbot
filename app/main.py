@@ -18,7 +18,7 @@ app = FastAPI(
     title="JobBot API",
     description="Automated Job Search and Application Management System",
     version="0.1.0",
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
 
 # Add CORS middleware
@@ -33,10 +33,12 @@ app.add_middleware(
 # Include API routes
 app.include_router(jobs_router, prefix=settings.API_V1_STR, tags=["jobs"])
 
+
 @app.get("/")
 async def root():
     """Health check endpoint"""
     return {"message": "JobBot API is running", "version": "0.1.0"}
+
 
 @app.get("/health")
 async def health_check(db: Session = Depends(get_db)):
@@ -47,14 +49,15 @@ async def health_check(db: Session = Depends(get_db)):
         db_status = "connected"
     except Exception as e:
         db_status = f"error: {str(e)}"
-    
+
     return {
         "status": "healthy",
         "service": "jobbot-api",
         "version": "0.1.0",
         "database": db_status,
-        "environment": "development" if settings.DEBUG else "production"
+        "environment": "development" if settings.DEBUG else "production",
     }
+
 
 @app.get(f"{settings.API_V1_STR}/")
 async def api_root():
@@ -65,14 +68,10 @@ async def api_root():
         "endpoints": [
             f"{settings.API_V1_STR}/jobs",
             f"{settings.API_V1_STR}/applications",
-            f"{settings.API_V1_STR}/responses"
-        ]
+            f"{settings.API_V1_STR}/responses",
+        ],
     }
 
+
 if __name__ == "__main__":
-    uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=settings.DEBUG
-    )
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=settings.DEBUG)

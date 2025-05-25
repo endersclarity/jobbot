@@ -9,25 +9,26 @@ from app.models.jobs import Job
 
 router = APIRouter()
 
+
 @router.get("/jobs", response_model=List[dict])
 async def get_jobs(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     company: Optional[str] = Query(None),
     remote_only: Optional[bool] = Query(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Get jobs with optional filtering"""
     query = db.query(Job)
-    
+
     if company:
         query = query.filter(Job.company.ilike(f"%{company}%"))
-    
+
     if remote_only is not None:
         query = query.filter(Job.remote_option == remote_only)
-    
+
     jobs = query.offset(skip).limit(limit).all()
-    
+
     return [
         {
             "id": job.id,
@@ -40,9 +41,11 @@ async def get_jobs(
             "job_type": job.job_type,
             "status": job.status,
             "scraped_date": job.scraped_date,
-            "job_url": job.job_url
-        } for job in jobs
+            "job_url": job.job_url,
+        }
+        for job in jobs
     ]
+
 
 @router.get("/jobs/{job_id}")
 async def get_job(job_id: int, db: Session = Depends(get_db)):
@@ -50,7 +53,7 @@ async def get_job(job_id: int, db: Session = Depends(get_db)):
     job = db.query(Job).filter(Job.id == job_id).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
-    
+
     return {
         "id": job.id,
         "title": job.title,
@@ -71,8 +74,9 @@ async def get_job(job_id: int, db: Session = Depends(get_db)):
         "application_deadline": job.application_deadline,
         "job_url": job.job_url,
         "source_site": job.source_site,
-        "keywords": job.keywords
+        "keywords": job.keywords,
     }
+
 
 @router.post("/jobs")
 async def create_job(job_data: dict, db: Session = Depends(get_db)):
@@ -83,19 +87,21 @@ async def create_job(job_data: dict, db: Session = Depends(get_db)):
     db.refresh(job)
     return {"id": job.id, "message": "Job created successfully"}
 
+
 @router.put("/jobs/{job_id}")
 async def update_job(job_id: int, job_data: dict, db: Session = Depends(get_db)):
     """Update an existing job"""
     job = db.query(Job).filter(Job.id == job_id).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
-    
+
     for key, value in job_data.items():
         if hasattr(job, key):
             setattr(job, key, value)
-    
+
     db.commit()
     return {"message": "Job updated successfully"}
+
 
 @router.delete("/jobs/{job_id}")
 async def delete_job(job_id: int, db: Session = Depends(get_db)):
@@ -103,7 +109,7 @@ async def delete_job(job_id: int, db: Session = Depends(get_db)):
     job = db.query(Job).filter(Job.id == job_id).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
-    
+
     db.delete(job)
     db.commit()
     return {"message": "Job deleted successfully"}

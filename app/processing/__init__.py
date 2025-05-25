@@ -18,7 +18,7 @@ from .quality_monitor import QualityMonitor
 
 __all__ = [
     "JobDataExtractor",
-    "DuplicateDetector", 
+    "DuplicateDetector",
     "DataNormalizer",
     "BatchProcessor",
     "DatabaseImporter",

@@ -12,11 +12,11 @@ from typing import Dict, List, Optional
 
 class BrowserScraper:
     """Browser automation scraper using Puppeteer MCP"""
-    
+
     def __init__(self, base_dir: str = None):
         self.base_dir = Path(base_dir) if base_dir else Path(__file__).parent.parent.parent / "scraped_data"
         self.raw_dir = self.base_dir / "raw"
-        
+
     def scrape_indeed_with_browser(self, query: str, location: str = "", max_pages: int = 2):
         """
         Scrape Indeed using browser automation
@@ -24,22 +24,22 @@ class BrowserScraper:
         """
         print(f"Browser scraping: '{query}' in '{location}' - {max_pages} pages")
         print("This would use Puppeteer MCP to navigate and scrape...")
-        
+
         # For now, create a placeholder implementation
         results = []
         for page in range(max_pages):
             # Simulate browser scraping
             raw_data = {
-                'timestamp': datetime.now().isoformat(),
-                'method': 'browser_automation',
-                'query': query,
-                'location': location,
-                'page': page,
-                'status': 'success',
-                'note': 'Browser automation implementation needed'
+                "timestamp": datetime.now().isoformat(),
+                "method": "browser_automation",
+                "query": query,
+                "location": location,
+                "page": page,
+                "status": "success",
+                "note": "Browser automation implementation needed",
             }
             results.append(raw_data)
-            
+
         return results
 
 

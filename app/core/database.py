@@ -14,28 +14,17 @@ if settings.database_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
 
 engine = create_engine(
-    settings.database_url,
-    connect_args=connect_args,
-    pool_pre_ping=True,
-    pool_recycle=300,
-    echo=settings.DEBUG
+    settings.database_url, connect_args=connect_args, pool_pre_ping=True, pool_recycle=300, echo=settings.DEBUG
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Asynchronous database setup
 async_engine = create_async_engine(
-    settings.async_database_url,
-    pool_pre_ping=True,
-    pool_recycle=300,
-    echo=settings.DEBUG
+    settings.async_database_url, pool_pre_ping=True, pool_recycle=300, echo=settings.DEBUG
 )
 
-AsyncSessionLocal = async_sessionmaker(
-    async_engine, 
-    class_=AsyncSession, 
-    expire_on_commit=False
-)
+AsyncSessionLocal = async_sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
 
 # Base class for models
 Base = declarative_base()
@@ -46,7 +35,7 @@ convention = {
     "uq": "uq_%(table_name)s_%(column_0_name)s",
     "ck": "ck_%(table_name)s",
     "fk": "fk_%(table_name)s_%(column_0_name)s",
-    "pk": "pk_%(table_name)s"
+    "pk": "pk_%(table_name)s",
 }
 
 Base.metadata = MetaData(naming_convention=convention)
