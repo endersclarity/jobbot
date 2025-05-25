@@ -8,14 +8,31 @@
  * - Stealth Plugins: Bot detection bypass
  * 
  * What Apify charges $500+/month for, we do for FREE! 💀
+ * 
+ * CLI Usage: node src/crawlee-scraper.js --search="software engineer" --location="San Francisco" --max=50 --json
  */
 
 import { PlaywrightCrawler } from 'crawlee';
+import { parseArgs } from 'util';
 
-// Simplified version without complex fingerprinting
+// Parse command line arguments for FastAPI integration
+const { values: args } = parseArgs({
+    options: {
+        search: { type: 'string', default: 'software engineer' },
+        location: { type: 'string', default: 'San Francisco, CA' },
+        max: { type: 'string', default: '50' },
+        json: { type: 'boolean', default: false },
+        site: { type: 'string', default: 'indeed' }
+    }
+});
 
-console.log('🔥 CRAWLEE DOMINATION INITIATED');
-console.log('💀 Eating Apify\'s lunch with their own technology...');
+const isJSONMode = args.json;
+
+// Only show startup messages in non-JSON mode
+if (!isJSONMode) {
+    console.log('🔥 CRAWLEE DOMINATION INITIATED');
+    console.log('💀 Eating Apify\'s lunch with their own technology...');
+}
 
 /**
  * Enterprise-grade Indeed scraper using Apify's open source stack
@@ -24,8 +41,11 @@ class CrawleeIndeedScraper {
     constructor(options = {}) {
         this.options = {
             maxConcurrency: 1, // Respectful scraping
-            maxRequestsPerCrawl: 50, // Limit for testing
+            maxRequestsPerCrawl: parseInt(args.max) || 50,
             requestHandlerTimeoutSecs: 60,
+            searchTerm: args.search,
+            location: args.location,
+            jsonMode: isJSONMode,
             ...options
         };
         
@@ -227,22 +247,49 @@ async function demonstrateDomination() {
         console.log('\n📊 DOMINATION RESULTS:');
         console.log(`✅ Total jobs extracted: ${results.length}`);
         console.log(`💸 Apify cost equivalent: $${(results.length * 0.03).toFixed(2)}`);
-        console.log(`🆓 Our cost: $0.00`);
-        console.log('\n🔥 LUNCH = EATEN! 🍽️💀');
-        
-        // Show sample results
-        if (results.length > 0) {
-            console.log('\n📋 Sample extracted jobs:');
-            results.slice(0, 3).forEach((job, i) => {
-                console.log(`\n${i + 1}. ${job.title}`);
-                console.log(`   Company: ${job.company}`);
-                console.log(`   Location: ${job.location}`);
-                console.log(`   URL: ${job.url}`);
-            });
+        // Output results based on mode
+        if (isJSONMode) {
+            // JSON output for FastAPI integration
+            console.log(JSON.stringify({
+                success: true,
+                jobsScraped: results.length,
+                searchTerm: args.search,
+                location: args.location,
+                scrapedAt: new Date().toISOString(),
+                jobs: results
+            }, null, 2));
+        } else {
+            // Human-readable output
+            console.log(`🆓 Our cost: $0.00`);
+            console.log('\n🔥 LUNCH = EATEN! 🍽️💀');
+            
+            // Show sample results
+            if (results.length > 0) {
+                console.log('\n📋 Sample extracted jobs:');
+                results.slice(0, 3).forEach((job, i) => {
+                    console.log(`\n${i + 1}. ${job.title}`);
+                    console.log(`   Company: ${job.company}`);
+                    console.log(`   Location: ${job.location}`);
+                    console.log(`   URL: ${job.url}`);
+                });
+            }
         }
         
     } catch (error) {
-        console.error('❌ Domination failed:', error.message);
+        if (isJSONMode) {
+            // JSON error output for FastAPI integration
+            console.log(JSON.stringify({
+                success: false,
+                error: error.message,
+                searchTerm: args.search,
+                location: args.location,
+                scrapedAt: new Date().toISOString(),
+                jobs: []
+            }, null, 2));
+            process.exit(1);
+        } else {
+            console.error('❌ Domination failed:', error.message);
+        }
         
         if (error.message.includes('Failed to launch browser')) {
             console.log('\n💡 Browser setup needed:');
@@ -274,9 +321,65 @@ async function demonstrateDomination() {
     }
 }
 
+// Main execution logic
+async function main() {
+    // CLI mode if any explicit arguments provided or JSON mode requested
+    const isCliMode = isJSONMode || process.argv.length > 2;
+    
+    if (isCliMode) {
+        // CLI mode - execute scraping with provided arguments
+        const scraper = new CrawleeIndeedScraper();
+        try {
+            const maxPages = Math.ceil(parseInt(args.max, 10) / 10) || 3;
+            const results = await scraper.scrapeJobs(
+                args.search,
+                args.location,
+                maxPages
+            );
+            
+            if (isJSONMode) {
+                console.log(JSON.stringify({
+                    success: true,
+                    jobsScraped: results.length,
+                    searchTerm: args.search,
+                    location: args.location,
+                    scrapedAt: new Date().toISOString(),
+                    jobs: results
+                }, null, 2));
+            } else {
+                console.log(`✅ Extracted ${results.length} jobs`);
+                if (results.length > 0) {
+                    console.log('\n📋 Sample jobs:');
+                    results.slice(0, 3).forEach((job, i) => {
+                        console.log(`${i + 1}. ${job.title} at ${job.company}`);
+                    });
+                }
+            }
+        } catch (error) {
+            if (isJSONMode) {
+                console.log(JSON.stringify({
+                    success: false,
+                    error: error.message,
+                    searchTerm: args.search,
+                    location: args.location,
+                    scrapedAt: new Date().toISOString(),
+                    jobs: []
+                }, null, 2));
+                process.exit(1);
+            } else {
+                console.error('❌ Scraping failed:', error.message);
+                process.exit(1);
+            }
+        }
+    } else {
+        // Demo mode - run the full demonstration
+        await demonstrateDomination();
+    }
+}
+
 // Execute if run directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-    demonstrateDomination().catch(console.error);
+    main().catch(console.error);
 }
 
 export { CrawleeIndeedScraper };
