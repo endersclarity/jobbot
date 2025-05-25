@@ -10,6 +10,7 @@ from app.core.config import settings
 from app.core.database import get_db, engine
 from app.models import Base
 from app.api.routes.jobs import router as jobs_router
+from app.routers.scraping import router as scraping_router
 
 # Create tables (for development - use Alembic in production)
 Base.metadata.create_all(bind=engine)
@@ -32,6 +33,7 @@ app.add_middleware(
 
 # Include API routes
 app.include_router(jobs_router, prefix=settings.API_V1_STR, tags=["jobs"])
+app.include_router(scraping_router, tags=["scraping"])
 
 
 @app.get("/")
@@ -67,8 +69,10 @@ async def api_root():
         "docs": f"{settings.API_V1_STR}/docs",
         "endpoints": [
             f"{settings.API_V1_STR}/jobs",
-            f"{settings.API_V1_STR}/applications",
+            f"{settings.API_V1_STR}/applications", 
             f"{settings.API_V1_STR}/responses",
+            "/api/v1/scraping/jobs",
+            "/api/v1/scraping/status",
         ],
     }
 
