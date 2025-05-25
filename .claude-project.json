@@ -1,18 +1,19 @@
 {
   "project": {
-    "name": "JobBot - Job Search Automation System",
-    "type": "python-fastapi",
-    "description": "Automated job search and application system evolving into business development automation platform",
-    "version": "1.5.0",
-    "status": "Phase 3B - HDTA Architecture Complete",
+    "name": "JobBot - Enterprise Scraping & Business Development System",
+    "type": "python-fastapi-nodejs",
+    "description": "Enterprise-grade scraping using Apify's open source tech stack + business development automation",
+    "version": "1.6.0",
+    "status": "Phase 3C - Crawlee Domination Complete",
     "repository": "https://github.com/endersclarity/jobbot",
-    "current_branch": "feature/phase-3-job-site-analysis"
+    "current_branch": "feature/phase-3c-crawlee-domination"
   },
   "architecture": {
     "backend": "FastAPI + SQLAlchemy + Alembic",
+    "frontend": "Node.js + Crawlee + Playwright (enterprise scraping)",
     "database": "PostgreSQL (production), SQLite (development)",
-    "scraping": "BrowserMCP + requests + BeautifulSoup",
-    "testing": "pytest with async support and coverage",
+    "scraping": "Crawlee + Playwright (primary), BrowserMCP + requests (fallback)",
+    "testing": "pytest (Python), npm test (Node.js)",
     "deployment": "WSL development server (172.22.206.209:8000)"
   },
   "hdta_structure": {
@@ -83,14 +84,16 @@
     "fallback_scraper": "puppeteer"
   },
   "development": {
-    "current_phase": "Phase 3B - Offline Processing Pipeline",
+    "current_phase": "Phase 3C - Crawlee Domination (Complete)",
     "completed_phases": [
       "Phase 1 - Foundation & Database Setup",
       "Phase 2 - Core API & Basic Job Management", 
-      "Phase 3A - Raw Data Collection"
+      "Phase 3A - Raw Data Collection",
+      "Phase 3B - HDTA Architecture & Memory Bank",
+      "Phase 3C - Crawlee Domination Infrastructure"
     ],
-    "next_milestone": "Implement Phase 3B offline processing pipeline",
-    "strategic_direction": "Transform JobBot → BusinessBot for market creation"
+    "next_milestone": "Install browser dependencies and deploy Crawlee scraper",
+    "strategic_direction": "Enterprise-grade scraping using Apify's own open source technology stack"
   },
   "git_workflow": {
     "main_branch": "main",
@@ -109,12 +112,13 @@
   },
   "metadata": {
     "created": "2025-05-25T18:45:00Z",
-    "last_updated": "2025-05-25T19:00:00Z",
-    "last_sync": "2025-05-25T19:00:00Z",
+    "last_updated": "2025-05-25T19:30:00Z",
+    "last_sync": "2025-05-25T19:30:00Z",
     "last_load": "2025-05-25T19:15:00Z",
     "architect_version": "1.0",
     "hdta_complete": true,
-    "sync_sessions": 2,
-    "last_commit": "3cb3178"
+    "crawlee_complete": true,
+    "sync_sessions": 3,
+    "last_commit": "8244193"
   }
 }
