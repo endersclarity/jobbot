@@ -37,18 +37,45 @@ class CrawleeIndeedScraper {
      */
     createCrawler() {
         return new PlaywrightCrawler({
-            // Basic anti-detection
+            // Enhanced anti-detection
             launchContext: {
                 launchOptions: {
-                    headless: true,
+                    headless: false, // Use real browser for better anti-detection
                     args: [
                         '--no-sandbox',
                         '--disable-setuid-sandbox',
                         '--disable-web-security',
-                        '--disable-features=VizDisplayCompositor'
+                        '--disable-features=VizDisplayCompositor',
+                        '--disable-blink-features=AutomationControlled',
+                        '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
                     ]
                 }
             },
+            
+            // Additional stealth measures
+            preNavigationHooks: [
+                async ({ page }) => {
+                    // Remove webdriver property
+                    await page.addInitScript(() => {
+                        Object.defineProperty(navigator, 'webdriver', {
+                            get: () => undefined,
+                        });
+                    });
+                    
+                    // Add realistic viewport and user agent
+                    await page.setViewportSize({ width: 1366, height: 768 });
+                    await page.setExtraHTTPHeaders({
+                        'Accept-Language': 'en-US,en;q=0.9',
+                        'Accept-Encoding': 'gzip, deflate, br',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                        'Sec-Fetch-Dest': 'document',
+                        'Sec-Fetch-Mode': 'navigate',
+                        'Sec-Fetch-Site': 'none',
+                        'Upgrade-Insecure-Requests': '1'
+                    });
+                }
+            ],
 
             // Crawlee configuration  
             maxConcurrency: this.options.maxConcurrency,
@@ -60,26 +87,52 @@ class CrawleeIndeedScraper {
                 log.info(`🎯 Scraping: ${request.url}`);
 
                 try {
-                    // Wait for job listings to load
-                    await page.waitForSelector('[data-testid="job-title"]', { timeout: 10000 });
+                    // Random delay to appear more human
+                    await page.waitForTimeout(Math.random() * 2000 + 1000);
+                    
+                    // Try multiple selectors for job listings
+                    const selectors = [
+                        '[data-testid="job-title"]',
+                        '.jobTitle a',
+                        '[data-jk] h2 a',
+                        '.jobTitle',
+                        '[data-cy="job-title"]'
+                    ];
+                    
+                    let jobSelector = null;
+                    for (const selector of selectors) {
+                        try {
+                            await page.waitForSelector(selector, { timeout: 5000 });
+                            jobSelector = selector;
+                            log.info(`✅ Found jobs using selector: ${selector}`);
+                            break;
+                        } catch (e) {
+                            log.debug(`❌ Selector ${selector} not found`);
+                        }
+                    }
+                    
+                    if (!jobSelector) {
+                        log.warning('No job listings found with any selector');
+                        return;
+                    }
 
-                    // Extract job data using Apify's proven patterns
-                    const jobs = await page.$$eval('[data-testid="job-title"]', (elements) => {
+                    // Extract job data using found selector
+                    const jobs = await page.$$eval(jobSelector, (elements) => {
                         return elements.map(el => {
-                            const jobCard = el.closest('[data-jk]');
-                            if (!jobCard) return null;
-
+                            const jobCard = el.closest('[data-jk], .job_seen_beacon, .jobsearch-SerpJobCard, .result');
+                            
                             return {
-                                title: el.textContent?.trim(),
-                                company: jobCard.querySelector('[data-testid="company-name"]')?.textContent?.trim(),
-                                location: jobCard.querySelector('[data-testid="job-location"]')?.textContent?.trim(),
-                                url: el.href,
-                                jobKey: jobCard.getAttribute('data-jk'),
-                                summary: jobCard.querySelector('[data-testid="job-snippet"]')?.textContent?.trim(),
+                                title: el.textContent?.trim() || el.getAttribute('title')?.trim(),
+                                company: jobCard?.querySelector('[data-testid="company-name"], .companyName, [data-testid="company-name"] span')?.textContent?.trim(),
+                                location: jobCard?.querySelector('[data-testid="job-location"], .companyLocation, .locationsContainer')?.textContent?.trim(),
+                                url: el.href || window.location.origin + el.getAttribute('href'),
+                                jobKey: jobCard?.getAttribute('data-jk') || `job-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                                summary: jobCard?.querySelector('[data-testid="job-snippet"], .summary, .jobSnippet')?.textContent?.trim(),
                                 scrapedAt: new Date().toISOString(),
-                                scrapedBy: 'crawlee-domination'
+                                scrapedBy: 'crawlee-domination',
+                                source: 'indeed'
                             };
-                        }).filter(Boolean);
+                        }).filter(job => job.title); // Only include jobs with titles
                     });
 
                     // Save results
