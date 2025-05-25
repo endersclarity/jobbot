@@ -1,7 +1,7 @@
 """
 Job-related database models
 """
-from sqlalchemy import Column, Integer, String, Text, DateTime, Date, Boolean, ARRAY, CheckConstraint
+from sqlalchemy import Column, Integer, String, Text, DateTime, Date, Boolean, CheckConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.core.database import Base
@@ -29,7 +29,7 @@ class Job(Base):
     job_type = Column(String(50), nullable=True, index=True)  # full-time, part-time, contract
     experience_level = Column(String(50), nullable=True, index=True)
     industry = Column(String(100), nullable=True, index=True)
-    keywords = Column(ARRAY(String), nullable=True)  # searchable keywords array
+    keywords = Column(Text, nullable=True)  # JSON-encoded searchable keywords array
     status = Column(String(50), default='discovered', index=True)  # discovered, targeted, applied, rejected, interviewing, offer
     
     # Relationships

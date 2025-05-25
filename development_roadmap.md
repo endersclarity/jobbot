@@ -83,19 +83,33 @@ open http://localhost:8000/docs
 
 ---
 
-## 🕷️ PHASE 3: Job Scraping Foundation
-**Branch**: `feature/phase-3-scraper`  
-**Goal**: Basic web scraping with Indeed integration  
-**Test Criteria**: Can scrape 10 jobs from Indeed, save to database, no duplicates
+## 🕷️ PHASE 3A: Token-Efficient Raw Data Collection
+**Branch**: `feature/phase-3a-raw-scraping`  
+**Goal**: Scrape job sites saving raw data files (NO LLM processing)  
+**Test Criteria**: Can scrape 100+ jobs, save raw files, avoid Claude Code token burn
 
 ### Tasks
-- [ ] Create basic web scraper with BeautifulSoup
-- [ ] Add Indeed scraper module
-- [ ] Implement rate limiting and politeness
-- [ ] Add duplicate detection logic
-- [ ] Create job data parser and normalizer
-- [ ] Add scraper configuration and scheduling
-- [ ] Test scraping with live data (small batch)
+- [ ] Create `scraped_data/` directory structure for raw files
+- [ ] Build Indeed scraper that saves raw HTML + metadata to JSON
+- [ ] Add LinkedIn scraper with raw data export
+- [ ] Implement rate limiting and anti-detection measures
+- [ ] Add batch processing with file rotation (daily/hourly batches)
+- [ ] Create scraper configuration and scheduling system
+- [ ] Test scraping 100+ jobs without processing content in Claude Code
+
+## 🔄 PHASE 3B: Offline Processing Pipeline  
+**Branch**: `feature/phase-3b-data-processing`  
+**Goal**: Clean raw scraped data for database import (outside Claude Code)  
+**Test Criteria**: Process raw files into clean JSON, detect duplicates, bulk import
+
+### Tasks
+- [ ] Create data cleaning scripts (extract text from HTML)
+- [ ] Build duplicate detection by URL, title+company hash
+- [ ] Add salary parsing and location normalization
+- [ ] Create bulk import API endpoint for processed data
+- [ ] Add data validation and error handling
+- [ ] Build processing pipeline monitoring and logging
+- [ ] Test full pipeline: scrape → clean → import to database
 
 ### Deliverables
 - Working Indeed scraper
