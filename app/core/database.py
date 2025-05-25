@@ -9,8 +9,13 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from app.core.config import settings
 
 # Synchronous database setup
+connect_args = {}
+if settings.database_url.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+
 engine = create_engine(
     settings.database_url,
+    connect_args=connect_args,
     pool_pre_ping=True,
     pool_recycle=300,
     echo=settings.DEBUG
