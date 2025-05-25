@@ -3,7 +3,8 @@ JobBot Configuration Settings
 Secure configuration management with environment variables
 """
 from typing import Optional
-from pydantic import BaseSettings, validator
+from pydantic import validator
+from pydantic_settings import BaseSettings
 from functools import lru_cache
 import os
 

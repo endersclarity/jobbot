@@ -1,7 +1,7 @@
 """
 Database models for JobBot
 """
-from sqlalchemy.orm import relationship
+from app.core.database import Base
 from app.models.jobs import Job
 from app.models.applications import (
     Application, 
@@ -11,10 +11,8 @@ from app.models.applications import (
     ExperienceClaim
 )
 
-# Add reverse relationship to Job model
-Job.applications = relationship("Application", back_populates="job", cascade="all, delete-orphan")
-
 __all__ = [
+    "Base",
     "Job",
     "Application", 
     "EmployerResponse",
