@@ -1,0 +1,25 @@
+{
+  "queries": [
+    "python developer",
+    "software engineer python",
+    "backend developer",
+    "full stack developer python",
+    "data engineer python"
+  ],
+  "locations": [
+    "San Francisco, CA",
+    "New York, NY",
+    "Seattle, WA",
+    "Austin, TX",
+    "Remote"
+  ],
+  "max_pages_per_search": 3,
+  "min_delay": 1.5,
+  "max_delay": 4.0,
+  "request_timeout": 10,
+  "max_files_per_directory": 1000,
+  "cleanup_old_files": true,
+  "days_to_keep": 30,
+  "rotate_user_agents": true,
+  "custom_user_agents": null
+}
