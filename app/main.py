@@ -9,6 +9,7 @@ import uvicorn
 from app.core.config import settings
 from app.core.database import get_db, engine
 from app.models import Base
+from app.api.routes.jobs import router as jobs_router
 
 # Create tables (for development - use Alembic in production)
 Base.metadata.create_all(bind=engine)
@@ -28,6 +29,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include API routes
+app.include_router(jobs_router, prefix=settings.API_V1_STR, tags=["jobs"])
 
 @app.get("/")
 async def root():

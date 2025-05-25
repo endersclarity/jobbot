@@ -68,7 +68,7 @@ class Reference(Base):
     company = Column(String(255), nullable=True)
     email = Column(String(255), nullable=True)
     phone = Column(String(20), nullable=True)
-    relationship = Column(String(100), nullable=True)
+    relationship_type = Column(String(100), nullable=True)
     credibility_rating = Column(Integer, CheckConstraint('credibility_rating >= 1 AND credibility_rating <= 10'), nullable=True)
     last_contacted = Column(Date, nullable=True)
     times_used = Column(Integer, default=0)

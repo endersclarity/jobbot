@@ -1,8 +1,8 @@
 # Active Context - Job Search Automation
 
 **Project**: Job Search Automation System  
-**Last Updated**: 2025-05-24 18:33:00  
-**Status**: Initial Setup & Planning  
+**Last Updated**: 2025-05-24 22:30:00  
+**Status**: Phase 1 Complete - Phase 2 In Progress  
 **Priority**: High  
 
 ## Current Goals
@@ -20,15 +20,24 @@ Automated end-to-end job search pipeline that:
 - Maintains detailed application database
 
 ## Current State
-- **Phase**: ✅ PHASE 1 COMPLETE - Foundation & Database Setup
-- **Next Action**: Begin Phase 2 - Core API & Basic Job Management  
-- **Blockers**: None
+- **Phase**: ✅ PHASE 1 COMPLETE, 🚧 PHASE 2 IN PROGRESS - Core API & CRUD Operations
+- **Current Branch**: `feature/phase-2-api` 
+- **Next Action**: Complete Phase 2, then implement token-efficient Phase 3 scraping
+- **Recent Work**: Server running successfully, CRUD operations functional, API docs accessible
+- **Server Status**: JobBot running on WSL IP 172.22.206.209:8000 ✅ Browser accessible
+- **API Status**: Interactive docs at http://172.22.206.209:8000/docs ✅ Working
+- **Blockers**: None - ready for Phase 2 completion and Phase 3 planning
 - **Decisions Made**: 
   - Technology stack: FastAPI + PostgreSQL + React
   - MCP servers installed: postgres, filesystem, fetch, puppeteer, gmail
   - 9-phase incremental development plan created
   - Testing framework: pytest with async support and coverage
   - Development workflow: Makefile with standardized commands
+  - **NEW**: codeRABBIT review process for all pull requests
+  - **NEW**: Project-specific CLAUDE.md with quality standards
+  - **FIXED**: Pydantic v2 compatibility issues resolved
+  - **FIXED**: SQLAlchemy relationship naming conflicts (relationship → relationship_type)
+  - **SWITCHED**: PostgreSQL → SQLite for immediate demo functionality
 - **Current Capabilities**: 
   - ✅ Complete Python project structure with proper packaging
   - ✅ Production-ready FastAPI application with health checks
@@ -39,6 +48,9 @@ Automated end-to-end job search pipeline that:
   - ✅ Secure configuration system with environment variables
   - ✅ Basic API endpoints with CORS and documentation
   - ✅ GitHub repository: https://github.com/endersclarity/jobbot
+  - ✅ SQLite database with working CRUD operations
+  - ✅ Server running successfully on WSL (172.22.206.209:8000)
+  - ✅ All core dependencies resolved and functional
 
 ## Architecture Components (Planned)
 1. **Web Scraper Module**: Job board data extraction
@@ -60,11 +72,26 @@ Automated end-to-end job search pipeline that:
 - Focusing on automation over manual intervention
 - Building modular architecture for easy maintenance
 
+## NEW ARCHITECTURE DECISION: Token-Efficient Scraping Strategy
+
+### Phase 3A: Raw Data Collection (No LLM Processing)
+- **Goal**: Scrape job sites and save raw data files locally
+- **Strategy**: Avoid processing scraped content through Claude Code to prevent token burn
+- **Output**: Raw JSON/HTML files saved to `scraped_data/` directory
+- **Benefits**: Can scrape thousands of jobs without Claude Code token limits
+
+### Phase 3B: Offline Processing Pipeline  
+- **Goal**: Clean and structure raw data outside Claude Code
+- **Strategy**: Simple parsing, deduplication, data validation
+- **Output**: Clean JSON files ready for database import
+- **LLM Processing**: Done separately by user for resume/cover letter optimization
+
 ## Immediate Next Steps
-1. Complete project scaffolding with all required files
-2. Define technology stack (Python, APIs, databases)
-3. Research target job boards and scraping requirements
-4. Design database schema for application tracking
+1. **Complete Phase 2** - finalize CRUD operations and API endpoints
+2. **Commit and create PR** for Phase 2 completion 
+3. **Design Phase 3A scraper** - raw data collection architecture
+4. **Build token-efficient scrapers** for Indeed, LinkedIn, Glassdoor
+5. **Create offline processing pipeline** for data cleaning and import
 
 ---
 

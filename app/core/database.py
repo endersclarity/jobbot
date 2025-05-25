@@ -9,8 +9,13 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from app.core.config import settings
 
 # Synchronous database setup
+connect_args = {}
+if settings.database_url.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+
 engine = create_engine(
     settings.database_url,
+    connect_args=connect_args,
     pool_pre_ping=True,
     pool_recycle=300,
     echo=settings.DEBUG
@@ -35,12 +40,12 @@ AsyncSessionLocal = async_sessionmaker(
 # Base class for models
 Base = declarative_base()
 
-# Naming convention for constraints
+# Simplified naming convention for constraints
 convention = {
     "ix": "ix_%(column_0_label)s",
     "uq": "uq_%(table_name)s_%(column_0_name)s",
-    "ck": "ck_%(table_name)s_%(constraint_name)s",
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "ck": "ck_%(table_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s",
     "pk": "pk_%(table_name)s"
 }
 

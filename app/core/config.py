@@ -3,7 +3,8 @@ JobBot Configuration Settings
 Secure configuration management with environment variables
 """
 from typing import Optional
-from pydantic import BaseSettings, validator
+from pydantic import validator
+from pydantic_settings import BaseSettings
 from functools import lru_cache
 import os
 
@@ -20,8 +21,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "your-secret-key-here-change-in-production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
-    # Database settings
-    POSTGRES_HOST: str = "localhost"
+    # Database settings - defaults to SQLite for development
+    POSTGRES_HOST: str = ""
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str = "jobbot"
     POSTGRES_PASSWORD: str = "jobbot_password"
@@ -71,6 +72,9 @@ class Settings(BaseSettings):
     @property
     def database_url(self) -> str:
         """Construct database URL from components"""
+        if not self.POSTGRES_HOST:
+            # Use SQLite for development
+            return "sqlite:///./jobbot.db"
         return (
             f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
