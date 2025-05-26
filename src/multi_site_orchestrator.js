@@ -85,7 +85,7 @@ export class MultiSiteOrchestrator {
             case CircuitState.CLOSED:
                 return true;
                 
-            case CircuitState.OPEN:
+            case CircuitState.OPEN: {
                 // Check if enough time has passed to try half-open
                 const timeSinceFailure = Date.now() - breaker.lastFailureTime;
                 if (timeSinceFailure >= this.options.circuitBreakerTimeout) {
@@ -94,6 +94,7 @@ export class MultiSiteOrchestrator {
                     return true;
                 }
                 return false;
+            }
                 
             case CircuitState.HALF_OPEN:
                 return true;

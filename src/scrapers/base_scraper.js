@@ -18,7 +18,7 @@ export class BaseJobScraper {
             maxConcurrency: 1,
             maxRequestsPerCrawl: 50,
             requestHandlerTimeoutSecs: 60,
-            headless: false,
+            headless: true,
             retryAttempts: 3,
             ...options
         };
@@ -111,7 +111,8 @@ export class BaseJobScraper {
                     await page.waitForTimeout(Math.random() * 2000 + 1000);
                     
                     // Call site-specific scraping logic
-                    const jobs = await this.extractJobs(page, request, log);
+                    const jobsRaw = await this.extractJobs(page, request, log) || [];
+                    const jobs = Array.isArray(jobsRaw) ? jobsRaw : [jobsRaw];
                     
                     // Save results
                     for (const job of jobs) {

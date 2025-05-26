@@ -357,7 +357,7 @@ export class GlassdoorJobScraper extends BaseJobScraper {
     async extractCompanyInsights(page, companyName, log) {
         try {
             // Navigate to company overview page
-            const companyUrl = `https://www.glassdoor.com/Overview/Working-at-${companyName.replace(/\s+/g, '-')}-EI_IE.htm`;
+            const slug = encodeURIComponent(companyName.replace(/\s+/g, '-'));\n            const companyUrl = `https://www.glassdoor.com/Overview/Working-at-${slug}-EI_IE.htm`;
             await page.goto(companyUrl, { waitUntil: 'networkidle2', timeout: 30000 });
             
             // Extract company insights
