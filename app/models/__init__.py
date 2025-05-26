@@ -12,8 +12,17 @@ from app.models.monitoring import (
     AlertRule,
     AlertInstance
 )
+from app.models.business_intelligence import (
+    Company,
+    Opportunity,
+    Demo,
+    OutreachCampaign,
+    OutreachContact,
+    BusinessMetric
+)
 
 __all__ = [
     "Base", "Job", "Application", "EmployerResponse", "Reference", "ReferenceUsage", "ExperienceClaim",
-    "ScrapeSession", "SiteExecution", "SessionMetric", "SystemHealth", "AlertRule", "AlertInstance"
+    "ScrapeSession", "SiteExecution", "SessionMetric", "SystemHealth", "AlertRule", "AlertInstance",
+    "Company", "Opportunity", "Demo", "OutreachCampaign", "OutreachContact", "BusinessMetric"
 ]

@@ -10,6 +10,7 @@ from app.core.config import settings
 from app.core.database import get_db, engine
 from app.models import Base
 from app.api.routes.jobs import router as jobs_router
+from app.api.routes.business import router as business_router
 from app.routers.scraping import router as scraping_router
 from app.routers.monitoring import router as monitoring_router
 
@@ -34,6 +35,7 @@ app.add_middleware(
 
 # Include API routes
 app.include_router(jobs_router, prefix=settings.API_V1_STR, tags=["jobs"])
+app.include_router(business_router, tags=["business-intelligence"])
 app.include_router(scraping_router, tags=["scraping"])
 app.include_router(monitoring_router, tags=["monitoring"])
 
@@ -73,6 +75,11 @@ async def api_root():
             f"{settings.API_V1_STR}/jobs",
             f"{settings.API_V1_STR}/applications", 
             f"{settings.API_V1_STR}/responses",
+            "/api/v1/business/companies",
+            "/api/v1/business/opportunities",
+            "/api/v1/business/demos",
+            "/api/v1/business/outreach",
+            "/api/v1/business/market-analysis",
             "/api/v1/scraping/jobs",
             "/api/v1/scraping/status",
             "/api/v1/monitoring/sessions",
