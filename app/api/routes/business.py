@@ -320,10 +320,14 @@ async def create_opportunity(opportunity: OpportunityCreate, db: Session = Depen
     return result
 
 
+class StageUpdate(BaseModel):
+    stage: str = Field(..., pattern="^(discovery|analysis|demo_creation|outreach|negotiation|closed)$")
+
+
 @router.put("/opportunities/{opportunity_id}/stage")
 async def update_opportunity_stage(
     opportunity_id: int,
-    stage: str = Field(..., pattern="^(discovery|analysis|demo_creation|outreach|negotiation|closed)$"),
+    stage_update: StageUpdate,
     db: Session = Depends(get_db)
 ):
     """Update opportunity stage"""
@@ -331,7 +335,7 @@ async def update_opportunity_stage(
     if not opportunity:
         raise HTTPException(status_code=404, detail="Opportunity not found")
     
-    opportunity.stage = stage
+    opportunity.stage = stage_update.stage
     opportunity.days_in_stage = 0  # Reset days in stage
     db.commit()
     

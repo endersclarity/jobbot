@@ -424,7 +424,7 @@ import React from 'react';
 
 function App() {{
   return (
-    <div style={{{{padding: '20px', fontFamily: 'Arial, sans-serif'}}}>
+    <div style={{'padding': '20px', 'fontFamily': 'Arial, sans-serif'}}>
       <h1>{context['demo']['title']}</h1>
       <p>Demo for {context['company']['name']}</p>
       <div>
