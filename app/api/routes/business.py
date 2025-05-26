@@ -21,6 +21,7 @@ from app.models.business_intelligence import (
     Company, Opportunity, Demo, OutreachCampaign, OutreachContact, BusinessMetric
 )
 from app.services.demo_generator import DemoGenerator, create_demo_for_opportunity
+from app.services.outreach_generator import OutreachMessageGenerator, generate_message_for_contact, create_outreach_sequence
 from pydantic import BaseModel, Field
 
 
@@ -111,6 +112,35 @@ class CampaignCreate(BaseModel):
     campaign_type: str = "cold_email"
     message_template: str
     subject_template: Optional[str] = None
+
+
+class MessageGenerationRequest(BaseModel):
+    contact_id: int
+    message_type: str = Field(default="cold_intro", pattern="^(cold_intro|follow_up_1|value_demonstration|final_attempt|response_positive)$")
+    custom_variables: Optional[Dict[str, Any]] = None
+
+
+class MessageResponse(BaseModel):
+    subject: str
+    message: str
+    personalization_score: float
+    context_used: Dict[str, Any]
+
+
+class EmailSequenceResponse(BaseModel):
+    sequence: List[Dict[str, Any]]
+    total_messages: int
+    estimated_duration_days: int
+
+
+class OutreachContactCreate(BaseModel):
+    campaign_id: int
+    company_id: int
+    name: str
+    title: Optional[str] = None
+    email: str
+    phone: Optional[str] = None
+    linkedin_url: Optional[str] = None
 
 
 class MarketAnalysisResponse(BaseModel):
@@ -568,9 +598,230 @@ async def start_company_discovery(
     }
 
 
+# Message Generation endpoints
+@router.post("/outreach/generate-message", response_model=MessageResponse)
+async def generate_outreach_message(
+    request: MessageGenerationRequest,
+    db: Session = Depends(get_db)
+):
+    """Generate a personalized outreach message for a contact"""
+    contact = db.query(OutreachContact).filter(OutreachContact.id == request.contact_id).first()
+    if not contact:
+        raise HTTPException(status_code=404, detail="Contact not found")
+    
+    generator = OutreachMessageGenerator(db)
+    message_data = generator.generate_personalized_message(
+        contact, 
+        request.message_type, 
+        request.custom_variables
+    )
+    
+    # Store the generated message in the contact's personalization data
+    if not contact.personalization_data:
+        contact.personalization_data = {}
+    
+    contact.personalization_data.update({
+        "last_generated_message": message_data,
+        "generation_timestamp": datetime.now().isoformat()
+    })
+    db.commit()
+    
+    return MessageResponse(**message_data)
+
+
+@router.post("/outreach/generate-sequence", response_model=EmailSequenceResponse)
+async def generate_email_sequence(
+    contact_id: int,
+    sequence_length: int = Query(4, ge=1, le=6),
+    db: Session = Depends(get_db)
+):
+    """Generate a complete email sequence for a contact"""
+    contact = db.query(OutreachContact).filter(OutreachContact.id == contact_id).first()
+    if not contact:
+        raise HTTPException(status_code=404, detail="Contact not found")
+    
+    generator = OutreachMessageGenerator(db)
+    sequence = generator.generate_email_sequence(contact, sequence_length)
+    
+    # Calculate estimated duration
+    max_delay = max([msg["send_delay_days"] for msg in sequence]) if sequence else 0
+    
+    return EmailSequenceResponse(
+        sequence=sequence,
+        total_messages=len(sequence),
+        estimated_duration_days=max_delay
+    )
+
+
+@router.post("/outreach/contacts", response_model=Dict[str, str])
+async def create_outreach_contact(contact: OutreachContactCreate, db: Session = Depends(get_db)):
+    """Create a new outreach contact"""
+    # Verify campaign and company exist
+    campaign = db.query(OutreachCampaign).filter(OutreachCampaign.id == contact.campaign_id).first()
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    
+    company = db.query(Company).filter(Company.id == contact.company_id).first()
+    if not company:
+        raise HTTPException(status_code=404, detail="Company not found")
+    
+    db_contact = OutreachContact(**contact.dict())
+    db.add(db_contact)
+    db.commit()
+    db.refresh(db_contact)
+    
+    return {"message": "Contact created successfully", "id": str(db_contact.id)}
+
+
+@router.post("/outreach/send")
+async def send_outreach_message(
+    contact_id: int,
+    message_type: str = "cold_intro",
+    background_tasks: BackgroundTasks = BackgroundTasks(),
+    db: Session = Depends(get_db)
+):
+    """Send an outreach message to a contact"""
+    contact = db.query(OutreachContact).filter(OutreachContact.id == contact_id).first()
+    if not contact:
+        raise HTTPException(status_code=404, detail="Contact not found")
+    
+    # Generate message
+    generator = OutreachMessageGenerator(db)
+    message_data = generator.generate_personalized_message(contact, message_type)
+    
+    # Update contact status and store message
+    contact.status = "sent"
+    contact.send_date = datetime.now()
+    contact.message_sent = message_data["message"]
+    contact.personalization_data = message_data["context_used"]
+    
+    # In production, this would integrate with email service (SendGrid, etc.)
+    # For now, we'll simulate the send
+    background_tasks.add_task(simulate_email_send, contact.email, message_data)
+    
+    db.commit()
+    
+    return {
+        "message": "Email queued for sending",
+        "contact_id": contact_id,
+        "subject": message_data["subject"],
+        "personalization_score": message_data["personalization_score"]
+    }
+
+
+@router.post("/outreach/analyze-response")
+async def analyze_response(
+    contact_id: int,
+    response_text: str,
+    db: Session = Depends(get_db)
+):
+    """Analyze a response from an outreach contact"""
+    contact = db.query(OutreachContact).filter(OutreachContact.id == contact_id).first()
+    if not contact:
+        raise HTTPException(status_code=404, detail="Contact not found")
+    
+    generator = OutreachMessageGenerator(db)
+    analysis = generator.analyze_response_sentiment(response_text)
+    
+    # Update contact with response data
+    contact.status = "replied"
+    contact.replied_date = datetime.now()
+    contact.response_content = response_text
+    contact.response_sentiment = analysis["sentiment"]
+    
+    # Determine next action based on sentiment
+    if analysis["sentiment"] == "positive":
+        if analysis["intent"] == "schedule_meeting":
+            contact.meeting_scheduled = True
+            next_action = "Schedule meeting"
+        else:
+            next_action = "Send follow-up with more details"
+    elif analysis["sentiment"] == "negative":
+        contact.status = "opted_out"
+        next_action = "Remove from campaign"
+    else:
+        next_action = "Follow up in 2 weeks"
+    
+    db.commit()
+    
+    return {
+        "analysis": analysis,
+        "recommended_action": next_action,
+        "contact_status": contact.status
+    }
+
+
+@router.get("/outreach/campaigns/{campaign_id}/metrics")
+async def get_campaign_metrics(campaign_id: int, db: Session = Depends(get_db)):
+    """Get comprehensive metrics for an outreach campaign"""
+    generator = OutreachMessageGenerator(db)
+    return generator.get_campaign_metrics(campaign_id)
+
+
+@router.get("/outreach/performance")
+async def get_outreach_performance(
+    days: int = Query(30, ge=1, le=365),
+    db: Session = Depends(get_db)
+):
+    """Get overall outreach performance metrics"""
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=days)
+    
+    # Get contacts created in period
+    contacts_query = db.query(OutreachContact).filter(
+        OutreachContact.created_at >= start_date
+    )
+    
+    total_contacts = contacts_query.count()
+    sent_contacts = contacts_query.filter(OutreachContact.status.in_(["sent", "delivered", "opened", "replied"])).count()
+    opened_contacts = contacts_query.filter(OutreachContact.status.in_(["opened", "replied"])).count()
+    replied_contacts = contacts_query.filter(OutreachContact.status == "replied").count()
+    meeting_contacts = contacts_query.filter(OutreachContact.meeting_scheduled == True).count()
+    
+    # Calculate average personalization score
+    contacts_with_scores = contacts_query.filter(
+        OutreachContact.personalization_data.isnot(None)
+    ).all()
+    
+    total_score = 0
+    scored_count = 0
+    
+    for contact in contacts_with_scores:
+        if contact.personalization_data and "personalization_score" in contact.personalization_data:
+            total_score += contact.personalization_data["personalization_score"]
+            scored_count += 1
+    
+    avg_personalization = total_score / scored_count if scored_count > 0 else 0
+    
+    return {
+        "period_days": days,
+        "total_contacts": total_contacts,
+        "sent_count": sent_contacts,
+        "opened_count": opened_contacts,
+        "replied_count": replied_contacts,
+        "meeting_count": meeting_contacts,
+        "send_rate": (sent_contacts / total_contacts * 100) if total_contacts > 0 else 0,
+        "open_rate": (opened_contacts / sent_contacts * 100) if sent_contacts > 0 else 0,
+        "response_rate": (replied_contacts / sent_contacts * 100) if sent_contacts > 0 else 0,
+        "meeting_rate": (meeting_contacts / sent_contacts * 100) if sent_contacts > 0 else 0,
+        "average_personalization_score": avg_personalization,
+        "period_start": start_date.isoformat(),
+        "period_end": end_date.isoformat()
+    }
+
+
 # Demo metrics endpoint
 @router.get("/demos/metrics")
 async def get_demo_metrics(days: int = Query(30, ge=1, le=365), db: Session = Depends(get_db)):
     """Get demo generation metrics"""
     generator = DemoGenerator(db)
     return generator.get_demo_metrics(days)
+
+
+# Utility function for simulating email sends
+async def simulate_email_send(email: str, message_data: Dict[str, Any]):
+    """Simulate sending an email (replace with real email service in production)"""
+    import asyncio
+    await asyncio.sleep(1)  # Simulate email service delay
+    print(f"Email sent to {email}: {message_data['subject']}")
+    return True
