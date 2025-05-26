@@ -11,13 +11,14 @@ Provides endpoints for:
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
+from sqlalchemy import desc, func as sql_func
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import json
 import asyncio
 import psutil
 import uuid
+import threading
 
 from app.core.database import get_db
 from app.models.monitoring import (
@@ -105,7 +106,7 @@ class AlertRuleCreate(BaseModel):
     threshold_duration_seconds: int = 60
     severity: str = Field(default="warning", pattern="^(info|warning|error|critical)$")
     enabled: bool = True
-    notification_channels: List[str] = []
+    notification_channels: List[str] = Field(default_factory=list)
     cooldown_seconds: int = 300
 
 
@@ -114,27 +115,36 @@ class WebSocketManager:
     
     def __init__(self):
         self.active_connections: List[WebSocket] = []
+        self._lock = threading.Lock()
     
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
-        self.active_connections.append(websocket)
+        with self._lock:
+            self.active_connections.append(websocket)
     
     def disconnect(self, websocket: WebSocket):
-        if websocket in self.active_connections:
-            self.active_connections.remove(websocket)
+        with self._lock:
+            if websocket in self.active_connections:
+                self.active_connections.remove(websocket)
     
     async def send_personal_message(self, message: str, websocket: WebSocket):
         try:
             await websocket.send_text(message)
-        except:
+        except (WebSocketDisconnect, ConnectionResetError, RuntimeError) as e:
+            print(f"WebSocket send failed: {e}")
             self.disconnect(websocket)
     
     async def broadcast(self, message: str):
         disconnected = []
-        for connection in self.active_connections:
+        # Create a copy of connections to avoid modification during iteration
+        with self._lock:
+            connections_copy = self.active_connections.copy()
+        
+        for connection in connections_copy:
             try:
                 await connection.send_text(message)
-            except:
+            except (WebSocketDisconnect, ConnectionResetError, RuntimeError) as e:
+                print(f"WebSocket broadcast failed: {e}")
                 disconnected.append(connection)
         
         # Clean up disconnected clients
@@ -294,10 +304,10 @@ async def get_dashboard_analytics(db: Session = Depends(get_db)):
     now = datetime.now()
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
     
-    # Today's session statistics
+    # Today's session statistics (optimized with index on start_time)
     today_sessions = db.query(ScrapeSession).filter(
         ScrapeSession.start_time >= today_start
-    ).all()
+    ).options().all()
     
     # Calculate statistics
     total_sessions_today = len(today_sessions)
@@ -311,18 +321,24 @@ async def get_dashboard_analytics(db: Session = Depends(get_db)):
         avg_duration = sum(s.duration_seconds or 0 for s in completed_sessions) / len(completed_sessions)
         avg_jobs_per_second = sum(s.jobs_per_second or 0 for s in completed_sessions) / len(completed_sessions)
     
-    # Site performance
-    site_stats = {}
-    for session in today_sessions:
-        sites = db.query(SiteExecution).filter(SiteExecution.session_id == session.session_id).all()
-        for site in sites:
-            if site.site_name not in site_stats:
-                site_stats[site.site_name] = {"total": 0, "successful": 0, "jobs": 0}
-            
-            site_stats[site.site_name]["total"] += 1
-            if site.status == "completed":
-                site_stats[site.site_name]["successful"] += 1
-            site_stats[site.site_name]["jobs"] += site.jobs_extracted or 0
+    # Site performance (optimized with aggregation)
+    site_stats_query = db.query(
+        SiteExecution.site_name,
+        sql_func.count(SiteExecution.id).label('total'),
+        sql_func.sum(sql_func.case([(SiteExecution.status == 'completed', 1)], else_=0)).label('successful'),
+        sql_func.sum(sql_func.coalesce(SiteExecution.jobs_extracted, 0)).label('jobs')
+    ).join(ScrapeSession, SiteExecution.session_id == ScrapeSession.session_id)\
+     .filter(ScrapeSession.start_time >= today_start)\
+     .group_by(SiteExecution.site_name).all()
+    
+    site_stats = {
+        row.site_name: {
+            "total": row.total,
+            "successful": row.successful or 0,
+            "jobs": row.jobs or 0
+        }
+        for row in site_stats_query
+    }
     
     # Calculate cost savings (vs Apify pricing)
     apify_cost_per_1k_jobs = 50  # Conservative estimate
@@ -379,13 +395,26 @@ async def get_active_alerts(db: Session = Depends(get_db)):
 async def create_scrape_session(
     search_term: str,
     location: Optional[str] = None,
-    sites: List[str] = ["indeed", "linkedin", "glassdoor"],
+    sites: Optional[List[str]] = None,
     max_jobs_per_site: int = 50,
     max_concurrency: int = 3,
     db: Session = Depends(get_db)
 ):
     """Create a new scraping session for monitoring"""
+    # Input validation
+    if not search_term or len(search_term.strip()) == 0:
+        raise HTTPException(status_code=400, detail="Search term cannot be empty")
+    
+    if max_jobs_per_site < 1 or max_jobs_per_site > 1000:
+        raise HTTPException(status_code=400, detail="Max jobs per site must be between 1 and 1000")
+    
+    if max_concurrency < 1 or max_concurrency > 10:
+        raise HTTPException(status_code=400, detail="Max concurrency must be between 1 and 10")
     session_id = str(uuid.uuid4())
+    
+    # Handle mutable default parameter
+    if sites is None:
+        sites = ["indeed", "linkedin", "glassdoor"]
     
     session = ScrapeSession(
         session_id=session_id,
@@ -425,6 +454,20 @@ async def record_session_metric(
     db: Session = Depends(get_db)
 ):
     """Record a metric for a scraping session"""
+    # Input validation
+    if not session_id or len(session_id.strip()) == 0:
+        raise HTTPException(status_code=400, detail="Session ID cannot be empty")
+    
+    if not metric_name or len(metric_name.strip()) == 0:
+        raise HTTPException(status_code=400, detail="Metric name cannot be empty")
+    
+    if metric_value < 0:
+        raise HTTPException(status_code=400, detail="Metric value cannot be negative")
+    
+    # Verify session exists
+    session = db.query(ScrapeSession).filter(ScrapeSession.session_id == session_id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
     metric = SessionMetric(
         session_id=session_id,
         metric_name=metric_name,

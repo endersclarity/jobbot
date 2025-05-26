@@ -31,12 +31,12 @@ class ScrapeSession(Base):
     max_concurrency = Column(Integer, default=3)
     
     # Session timing
-    start_time = Column(DateTime(timezone=True), server_default=func.now())
+    start_time = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     end_time = Column(DateTime(timezone=True))
     duration_seconds = Column(Float)
     
     # Session results
-    status = Column(String(50), default="running")  # running, completed, failed, timeout
+    status = Column(String(50), default="running", index=True)  # running, completed, failed, timeout
     total_jobs_found = Column(Integer, default=0)
     successful_sites = Column(Integer, default=0)
     failed_sites = Column(Integer, default=0)
@@ -53,6 +53,9 @@ class ScrapeSession(Base):
     # Relationships
     site_executions = relationship("SiteExecution", back_populates="session", cascade="all, delete-orphan")
     session_metrics = relationship("SessionMetric", back_populates="session", cascade="all, delete-orphan")
+    
+    def __repr__(self):
+        return f"<ScrapeSession(id={self.id}, session_id='{self.session_id}', search_term='{self.search_term}', status='{self.status}')>"
 
 
 class SiteExecution(Base):
@@ -65,16 +68,16 @@ class SiteExecution(Base):
     session_id = Column(String(100), ForeignKey("scrape_sessions.session_id"), nullable=False)
     
     # Site information
-    site_name = Column(String(50), nullable=False)  # indeed, linkedin, glassdoor
+    site_name = Column(String(50), nullable=False, index=True)  # indeed, linkedin, glassdoor
     site_url = Column(String(500))
     
     # Execution timing
-    start_time = Column(DateTime(timezone=True), server_default=func.now())
+    start_time = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     end_time = Column(DateTime(timezone=True))
     duration_seconds = Column(Float)
     
     # Execution results
-    status = Column(String(50), default="running")  # running, completed, failed, timeout, circuit_open
+    status = Column(String(50), default="running", index=True)  # running, completed, failed, timeout, circuit_open
     jobs_extracted = Column(Integer, default=0)
     pages_scraped = Column(Integer, default=0)
     requests_made = Column(Integer, default=0)
@@ -95,6 +98,9 @@ class SiteExecution(Base):
     
     # Relationships
     session = relationship("ScrapeSession", back_populates="site_executions")
+    
+    def __repr__(self):
+        return f"<SiteExecution(id={self.id}, site_name='{self.site_name}', session_id='{self.session_id}', status='{self.status}')>"
 
 
 class SessionMetric(Base):
@@ -107,7 +113,7 @@ class SessionMetric(Base):
     session_id = Column(String(100), ForeignKey("scrape_sessions.session_id"), nullable=False)
     
     # Metric information
-    metric_name = Column(String(100), nullable=False)  # jobs_per_minute, cpu_usage, memory_usage, etc.
+    metric_name = Column(String(100), nullable=False, index=True)  # jobs_per_minute, cpu_usage, memory_usage, etc.
     metric_value = Column(Float, nullable=False)
     metric_unit = Column(String(20))  # jobs, percent, mb, seconds
     
@@ -124,6 +130,9 @@ class SessionMetric(Base):
     
     # Relationships
     session = relationship("ScrapeSession", back_populates="session_metrics")
+    
+    def __repr__(self):
+        return f"<SessionMetric(id={self.id}, session_id='{self.session_id}', metric_name='{self.metric_name}', metric_value={self.metric_value})>"
 
 
 class SystemHealth(Base):
@@ -168,6 +177,9 @@ class SystemHealth(Base):
     
     # Metadata
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    def __repr__(self):
+        return f"<SystemHealth(id={self.id}, cpu_usage={self.cpu_usage_percent}%, memory_usage={self.memory_usage_percent}%, timestamp='{self.timestamp}')>"
 
 
 class AlertRule(Base):
@@ -200,6 +212,9 @@ class AlertRule(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     last_triggered = Column(DateTime(timezone=True))
+    
+    def __repr__(self):
+        return f"<AlertRule(id={self.id}, rule_name='{self.rule_name}', metric_name='{self.metric_name}', enabled={self.enabled})>"
 
 
 class AlertInstance(Base):
@@ -218,7 +233,7 @@ class AlertInstance(Base):
     severity = Column(String(20), nullable=False)
     
     # Status tracking
-    status = Column(String(20), default="active")  # active, acknowledged, resolved
+    status = Column(String(20), default="active", index=True)  # active, acknowledged, resolved
     acknowledged_at = Column(DateTime(timezone=True))
     resolved_at = Column(DateTime(timezone=True))
     
@@ -233,3 +248,6 @@ class AlertInstance(Base):
     
     # Relationships
     rule = relationship("AlertRule")
+    
+    def __repr__(self):
+        return f"<AlertInstance(id={self.id}, rule_id={self.rule_id}, status='{self.status}', severity='{self.severity}', triggered_at='{self.triggered_at}')>"

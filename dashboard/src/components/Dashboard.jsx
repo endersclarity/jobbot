@@ -22,26 +22,51 @@ function Dashboard() {
   const { status: orchestratorStatus, isLoading: orchestratorLoading } = useOrchestratorStatus()
 
   // Fetch additional dashboard data
-  const { data: jobStats, isLoading: jobStatsLoading } = useQuery({
+  const { data: jobStats, isLoading: jobStatsLoading, error: jobStatsError } = useQuery({
     queryKey: ['jobStats'],
     queryFn: () => jobsApi.getJobStats(),
     select: (response) => response.data,
     refetchInterval: 30000,
+    retry: 3,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000)
   })
 
-  const { data: recentSessions, isLoading: sessionsLoading } = useQuery({
+  const { data: recentSessions, isLoading: sessionsLoading, error: sessionsError } = useQuery({
     queryKey: ['recentSessions'],
     queryFn: () => monitoringApi.getScrapingSessions({ limit: 5, sort: 'created_at:desc' }),
     select: (response) => response.data,
     refetchInterval: 10000,
+    retry: 3,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000)
   })
 
-  const { data: siteStats, isLoading: siteStatsLoading } = useQuery({
+  const { data: siteStats, isLoading: siteStatsLoading, error: siteStatsError } = useQuery({
     queryKey: ['siteStats'],
     queryFn: () => monitoringApi.getSiteStats(),
     select: (response) => response.data,
     refetchInterval: 30000,
+    retry: 3,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000)
   })
+
+  // Check for critical errors first
+  if (jobStatsError || sessionsError || siteStatsError) {
+    return (
+      <div className="error-state">
+        <AlertTriangle className="h-8 w-8 text-red-500 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Dashboard Error</h3>
+        <p className="text-gray-600 mb-4">
+          Failed to load dashboard data. Please check your connection and try again.
+        </p>
+        <button 
+          className="btn btn-primary"
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </button>
+      </div>
+    )
+  }
 
   if (metricsLoading || jobStatsLoading || orchestratorLoading || siteStatsLoading) {
     return (
