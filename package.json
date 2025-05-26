@@ -7,10 +7,18 @@
   "scripts": {
     "start": "node src/crawlee-scraper.js",
     "dev": "node --watch src/crawlee-scraper.js",
+    "orchestrator": "node src/multi_site_orchestrator.js",
+    "multi-site": "node src/multi_site_orchestrator.js --search='software engineer' --location='San Francisco, CA' --sites=indeed,linkedin,glassdoor",
+    "scrape:indeed": "node src/scrapers/indeed_scraper.js",
+    "scrape:linkedin": "node src/scrapers/linkedin_scraper.js", 
+    "scrape:glassdoor": "node src/scrapers/glassdoor_scraper.js",
+    "scrape:all": "npm run orchestrator -- --sites=indeed,linkedin,glassdoor --max=50",
+    "demo": "npm run multi-site -- --search='python developer' --max=25 --concurrency=2",
     "install-crawlee": "npm install crawlee playwright",
     "install-fingerprinting": "npm install fingerprint-injector fingerprint-generator",
     "install-stealth": "npm install puppeteer-extra puppeteer-extra-plugin-stealth",
-    "install-all": "npm run install-crawlee && npm run install-fingerprinting && npm run install-stealth"
+    "install-all": "npm run install-crawlee && npm run install-fingerprinting && npm run install-stealth",
+    "install-browsers": "npx playwright install-deps"
   },
   "dependencies": {
     "crawlee": "^3.13.0",
