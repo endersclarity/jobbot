@@ -35,8 +35,8 @@ kombu==5.3.4
 python-dotenv==1.0.0
 python-multipart==0.0.6
 httpx==0.25.2
-psutil==5.9.6
-websockets==12.0
+psutil==7.0.0
+websockets==14.1
 
 # Development and Testing
 pytest==7.4.3

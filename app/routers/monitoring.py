@@ -184,7 +184,8 @@ async def websocket_endpoint(websocket: WebSocket):
 async def get_real_time_system_metrics() -> Dict[str, Any]:
     """Get current system metrics for real-time monitoring"""
     try:
-        cpu_percent = psutil.cpu_percent(interval=1)
+        # Non-blocking sample; returns immediately with the last computed value
+        cpu_percent = psutil.cpu_percent(interval=None)
         memory = psutil.virtual_memory()
         disk = psutil.disk_usage('/')
         
