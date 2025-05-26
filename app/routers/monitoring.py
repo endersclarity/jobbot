@@ -11,7 +11,7 @@ Provides endpoints for:
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import func, desc, and_
+from sqlalchemy import desc
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import json

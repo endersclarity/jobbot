@@ -36,7 +36,7 @@ function PerformanceChart({ timeRange = '1h', height = 300 }) {
       const baseResponseTime = 120 + Math.random() * 50
       
       return {
-        time: format(time, timeRange === '1h' ? 'HH:mm' : 'HH:mm'),
+        time: format(time, timeRange === '1h' ? 'HH:mm' : timeRange === '6h' ? 'HH:mm' : 'MMM dd HH:mm'),
         timestamp: time.toISOString(),
         jobs_per_minute: Math.round(baseJobsPerMinute + (Math.random() - 0.5) * 10),
         success_rate: Math.round(baseSuccessRate * 100),
@@ -154,7 +154,7 @@ function PerformanceChart({ timeRange = '1h', height = 300 }) {
               yAxisId="left"
               tick={{ fontSize: 12 }}
               axisLine={false}
-              domain={[80, 100]}
+              domain={['dataMin - 5', 'dataMax + 5']}
             />
             <YAxis 
               yAxisId="right" 

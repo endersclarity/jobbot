@@ -43,7 +43,7 @@ function Dashboard() {
     refetchInterval: 30000,
   })
 
-  if (metricsLoading || jobStatsLoading || orchestratorLoading) {
+  if (metricsLoading || jobStatsLoading || orchestratorLoading || siteStatsLoading) {
     return (
       <div className="loading">
         <Activity className="h-6 w-6 animate-spin mr-2" />
@@ -167,7 +167,7 @@ function Dashboard() {
           </div>
           <div className="card-content">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {Object.entries(siteStats).map(([site, stats]) => (
+              {Object.entries(siteStats || {}).map(([site, stats]) => (
                 <div key={site} className="border rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium capitalize">{site}</h4>

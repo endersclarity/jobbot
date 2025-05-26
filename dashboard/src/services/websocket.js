@@ -18,6 +18,8 @@ class WebSocketService {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionAttempts: 5,
+      timeout: 10000,
+      forceNew: true,
     })
 
     this.socket.on('connect', () => {
@@ -113,6 +115,11 @@ class WebSocketService {
 
   // Send data to server
   send(event, data) {
+    if (!event || typeof event !== 'string') {
+      console.error('Invalid event name for WebSocket send:', event)
+      return
+    }
+
     if (this.socket?.connected) {
       this.socket.emit(event, data)
     } else {

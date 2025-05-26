@@ -140,7 +140,9 @@ function SessionsList({ sessions = [], showDetails = true }) {
 
           {session.error_message && (
             <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
-              <strong>Error:</strong> {session.error_message}
+              <strong>Error:</strong> {typeof session.error_message === 'string' 
+                ? session.error_message.replace(/[<>]/g, '') 
+                : 'Unknown error occurred'}
             </div>
           )}
 

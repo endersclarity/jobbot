@@ -5,7 +5,12 @@ from app.core.database import Base
 from app.models.jobs import Job
 from app.models.applications import Application, EmployerResponse, Reference, ReferenceUsage, ExperienceClaim
 from app.models.monitoring import (
-    ScrapeSession, SiteExecution, SessionMetric, SystemHealth, AlertRule, AlertInstance
+    ScrapeSession,
+    SiteExecution, 
+    SessionMetric,
+    SystemHealth,
+    AlertRule,
+    AlertInstance
 )
 
 __all__ = [

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { 
   Settings as SettingsIcon, 
   Save, 
@@ -50,8 +50,6 @@ function Settings() {
       errorThreshold: 10,
       enableEmailAlerts: false,
       alertEmail: '',
-      enableSlackAlerts: false,
-      slackWebhook: '',
       performanceAlerts: true,
     },
     
@@ -63,19 +61,12 @@ function Settings() {
       backupFrequency: 'daily',
     },
     
-    // API Configuration
-    api: {
-      rateLimitPerMinute: 1000,
-      enableCors: true,
-      corsOrigins: 'http://localhost:3000,http://172.22.206.209:3000',
-      enableApiDocs: true,
-    },
   })
 
   const [saving, setSaving] = useState(false)
   const [testingConnection, setTestingConnection] = useState({})
 
-  const handleSettingChange = (section, key, value) => {
+  const handleSettingChange = useCallback((section, key, value) => {
     setSettings(prev => ({
       ...prev,
       [section]: {
@@ -83,9 +74,9 @@ function Settings() {
         [key]: value
       }
     }))
-  }
+  }, [])
 
-  const handleSiteSettingChange = (site, key, value) => {
+  const handleSiteSettingChange = useCallback((site, key, value) => {
     setSettings(prev => ({
       ...prev,
       sites: {
@@ -96,7 +87,7 @@ function Settings() {
         }
       }
     }))
-  }
+  }, [])
 
   const handleSaveSettings = async () => {
     setSaving(true)

@@ -24,7 +24,10 @@ function Layout({ children }) {
   ]
 
   const isActive = (href) => {
-    return href === '/' ? location.pathname === '/' : location.pathname.startsWith(href)
+    if (href === '/') {
+      return location.pathname === '/'
+    }
+    return location.pathname.startsWith(href) && location.pathname !== '/'
   }
 
   return (
@@ -54,7 +57,11 @@ function Layout({ children }) {
                   <span className="text-sm font-medium">Offline</span>
                 </div>
               )}
-              <div className="status-badge status-info">
+              <div 
+                className="status-badge status-info" 
+                role="status" 
+                aria-label="Current phase indicator"
+              >
                 Phase 5B
               </div>
             </div>

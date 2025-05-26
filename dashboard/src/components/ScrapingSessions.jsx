@@ -148,10 +148,11 @@ function ScrapingSessions() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">All Sites</option>
-              <option value="indeed">Indeed</option>
-              <option value="linkedin">LinkedIn</option>
-              <option value="glassdoor">Glassdoor</option>
-              <option value="multi-site">Multi-Site</option>
+              {['indeed', 'linkedin', 'glassdoor', 'multi-site'].map(site => (
+                <option key={site} value={site}>
+                  {site.charAt(0).toUpperCase() + site.slice(1)}
+                </option>
+              ))}
             </select>
 
             {/* Quick Actions */}

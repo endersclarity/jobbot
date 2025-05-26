@@ -112,7 +112,11 @@ class SessionMetric(Base):
     metric_unit = Column(String(20))  # jobs, percent, mb, seconds
     
     # Timing
-    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    timestamp = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        index=True,            # speeds up range queries
+    )
     
     # Context
     site_name = Column(String(50))  # Optional: metric specific to a site
@@ -156,7 +160,11 @@ class SystemHealth(Base):
     alerts_active = Column(Integer, default=0)
     
     # Timing
-    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    timestamp = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        index=True,            # speeds up range queries
+    )
     
     # Metadata
     created_at = Column(DateTime(timezone=True), server_default=func.now())

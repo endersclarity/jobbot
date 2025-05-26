@@ -6,7 +6,6 @@ import { monitoringApi } from '../services/api'
 export function useRealTimeMetrics() {
   const [realTimeData, setRealTimeData] = useState(null)
   const [connectionStatus, setConnectionStatus] = useState({ connected: false })
-  const wsConnected = useRef(false)
 
   // Fetch initial metrics data
   const { data: initialMetrics, isLoading, error, refetch } = useQuery({
@@ -23,7 +22,6 @@ export function useRealTimeMetrics() {
     // Subscribe to real-time updates
     const unsubscribeConnection = wsService.on('connection_status', (status) => {
       setConnectionStatus(status)
-      wsConnected.current = status.connected
       
       if (status.connected) {
         // Subscribe to metrics updates when connected
