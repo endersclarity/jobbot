@@ -7,7 +7,11 @@ import {
   Settings, 
   Zap, 
   Wifi, 
-  WifiOff 
+  WifiOff,
+  Building,
+  Target,
+  TrendingUp,
+  Mail
 } from 'lucide-react'
 import wsService from '../services/websocket'
 import { useRealTimeMetrics } from '../hooks/useRealTimeMetrics'
@@ -20,6 +24,10 @@ function Layout({ children }) {
     { name: 'Dashboard', href: '/', icon: Activity },
     { name: 'Sessions', href: '/sessions', icon: Database },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { name: 'Companies', href: '/companies', icon: Building },
+    { name: 'Opportunities', href: '/opportunities', icon: Target },
+    { name: 'Market Analysis', href: '/market', icon: TrendingUp },
+    { name: 'Outreach', href: '/outreach', icon: Mail },
     { name: 'Settings', href: '/settings', icon: Settings },
   ]
 
