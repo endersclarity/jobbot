@@ -1,8 +1,20 @@
-# JobBot - Automated Job Search System
+# 🧠 Business Intelligence Engine (BIE)
+*Evolved from JobBot: From Job Search to Business Opportunity Creation*
 
-## Overview
+## 🎯 Overview
 
-JobBot is a comprehensive job search automation platform that streamlines the entire job application process from discovery to tracking. The system intelligently scrapes job postings, generates tailored resumes and cover letters, submits applications automatically, and tracks all responses and follow-ups.
+The Business Intelligence Engine is a sophisticated automation platform that transforms raw data scraping into strategic business opportunity identification and client acquisition. Instead of searching for jobs, BIE discovers companies with digital gaps, analyzes their pain points, generates proof-of-concept solutions, and automates personalized outreach.
+
+**Core Philosophy**: "Don't find jobs. Create opportunities."
+
+## 🚀 What BIE Does
+
+- **🔍 Company Discovery**: Scrapes business directories and identifies local companies with automation potential
+- **🧠 Tech Stack Analysis**: Detects outdated technology, security issues, and performance problems  
+- **🎯 Opportunity Scoring**: Ranks companies by automation potential, urgency, and revenue opportunity
+- **🛠️ Demo Generation**: Auto-creates proof-of-concept solutions for identified problems
+- **📨 Smart Outreach**: Generates hyper-personalized messages with working solutions attached
+- **📊 Success Tracking**: Monitors engagement, conversion rates, and revenue generated
 
 ## Phase 1 Status: ✅ COMPLETE
 

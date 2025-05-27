@@ -9,8 +9,8 @@ def test_root_endpoint(client: TestClient):
     response = client.get("/")
     assert response.status_code == 200
     data = response.json()
-    assert data["message"] == "JobBot API is running"
-    assert data["version"] == "0.1.0"
+    assert data["message"] == "Business Intelligence Engine API is running"
+    assert data["version"] == "1.0.0"
 
 def test_health_endpoint(client: TestClient):
     """Test health check endpoint"""
@@ -18,8 +18,8 @@ def test_health_endpoint(client: TestClient):
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "healthy"
-    assert data["service"] == "jobbot-api"
-    assert data["version"] == "0.1.0"
+    assert data["service"] == "business-intelligence-engine"
+    assert data["version"] == "1.0.0"
     assert "database" in data
 
 def test_api_root_endpoint(client: TestClient):
@@ -27,5 +27,5 @@ def test_api_root_endpoint(client: TestClient):
     response = client.get("/api/v1/")
     assert response.status_code == 200
     data = response.json()
-    assert data["message"] == "JobBot API v1"
+    assert data["message"] == "Business Intelligence Engine API v1"
     assert "endpoints" in data

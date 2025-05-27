@@ -1,5 +1,5 @@
 """
-Database models for JobBot
+Database models for Business Intelligence Engine
 """
 from app.core.database import Base
 from app.models.jobs import Job
@@ -14,6 +14,11 @@ from app.models.monitoring import (
 )
 from app.models.business_intelligence import (
     Company,
+    CompanyTechStack,
+    DecisionMaker,
+    BusinessOpportunity,
+    OutreachRecord,
+    WebsiteAudit,
     Opportunity,
     Demo,
     OutreachCampaign,
@@ -33,7 +38,8 @@ from app.models.analytics import (
 __all__ = [
     "Base", "Job", "Application", "EmployerResponse", "Reference", "ReferenceUsage", "ExperienceClaim",
     "ScrapeSession", "SiteExecution", "SessionMetric", "SystemHealth", "AlertRule", "AlertInstance",
-    "Company", "Opportunity", "Demo", "OutreachCampaign", "OutreachContact", "BusinessMetric",
+    "Company", "CompanyTechStack", "DecisionMaker", "BusinessOpportunity", "OutreachRecord", "WebsiteAudit",
+    "Opportunity", "Demo", "OutreachCampaign", "OutreachContact", "BusinessMetric",
     "LeadScore", "ROIMetrics", "PredictiveModel", "ModelPrediction", "CompetitiveIntelligence", 
     "AdvancedCampaign", "BusinessMetrics"
 ]
