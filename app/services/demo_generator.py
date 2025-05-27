@@ -8,14 +8,11 @@ Automated proof-of-concept generation system that:
 - Deploys demos to staging environments
 """
 
-import os
 import json
 import subprocess
-import shutil
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
 from datetime import datetime, timedelta
-import uuid
 
 from sqlalchemy.orm import Session
 from sqlalchemy import func

@@ -11,17 +11,16 @@ API endpoints for:
 
 from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from sqlalchemy.orm import Session
-from sqlalchemy import func, desc, and_, or_
+from sqlalchemy import func, desc, or_
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
-import json
 
 from app.core.database import get_db
 from app.models.business_intelligence import (
-    Company, Opportunity, Demo, OutreachCampaign, OutreachContact, BusinessMetric
+    Company, Opportunity, Demo, OutreachCampaign, OutreachContact
 )
 from app.services.demo_generator import DemoGenerator, create_demo_for_opportunity
-from app.services.outreach_generator import OutreachMessageGenerator, generate_message_for_contact, create_outreach_sequence
+from app.services.outreach_generator import OutreachMessageGenerator
 from pydantic import BaseModel, Field
 
 
@@ -780,7 +779,7 @@ async def get_outreach_performance(
     sent_contacts = contacts_query.filter(OutreachContact.status.in_(["sent", "delivered", "opened", "replied"])).count()
     opened_contacts = contacts_query.filter(OutreachContact.status.in_(["opened", "replied"])).count()
     replied_contacts = contacts_query.filter(OutreachContact.status == "replied").count()
-    meeting_contacts = contacts_query.filter(OutreachContact.meeting_scheduled == True).count()
+    meeting_contacts = contacts_query.filter(OutreachContact.meeting_scheduled).count()
     
     # Calculate average personalization score
     contacts_with_scores = contacts_query.filter(
