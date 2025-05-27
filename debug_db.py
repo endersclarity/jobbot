@@ -5,18 +5,31 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from sqlalchemy import text
+import sqlalchemy as sa
 from app.core.database import engine
 
 def check_database():
     try:
         with engine.connect() as conn:
-            # List all tables
-            result = conn.execute(text("""
-                SELECT table_name 
-                FROM information_schema.tables 
-                WHERE table_schema = 'public' 
-                ORDER BY table_name
-            """))
+            # Check database type
+            inspector = sa.inspect(engine)
+            
+            if engine.dialect.name == 'sqlite':
+                # SQLite-specific query
+                result = conn.execute(text("""
+                    SELECT name as table_name 
+                    FROM sqlite_master 
+                    WHERE type='table' 
+                    ORDER BY name
+                """))
+            else:
+                # PostgreSQL/MySQL query
+                result = conn.execute(text("""
+                    SELECT table_name 
+                    FROM information_schema.tables 
+                    WHERE table_schema = 'public' 
+                    ORDER BY table_name
+                """))
             tables = [row[0] for row in result]
             
             print("📋 Available tables:")

@@ -234,14 +234,15 @@ def upgrade() -> None:
     op.add_column('companies', sa.Column('discovery_date', sa.DateTime(timezone=True), nullable=True))
     op.add_column('companies', sa.Column('last_analyzed', sa.DateTime(timezone=True), nullable=True))
     op.add_column('companies', sa.Column('analysis_status', sa.String(length=50), nullable=True))
-    op.alter_column('companies', 'domain',
-               existing_type=sa.VARCHAR(length=500),
-               type_=sa.String(length=200),
-               existing_nullable=True)
-    op.alter_column('companies', 'address',
-               existing_type=sa.VARCHAR(length=500),
-               type_=sa.Text(),
-               existing_nullable=True)
+    with op.batch_alter_table('companies') as batch:
+        batch.alter_column('domain',
+                   existing_type=sa.VARCHAR(length=500),
+                   type_=sa.String(length=200),
+                   existing_nullable=True)
+        batch.alter_column('address',
+                   existing_type=sa.VARCHAR(length=500),
+                   type_=sa.Text(),
+                   existing_nullable=True)
     op.drop_index('ix_companies_business_status', table_name='companies')
     op.drop_index('ix_companies_city', table_name='companies')
     op.drop_index('ix_companies_discovery_source', table_name='companies')
