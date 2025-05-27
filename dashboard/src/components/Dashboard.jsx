@@ -1,14 +1,10 @@
-import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { 
   Activity, 
   Database, 
   Globe, 
   TrendingUp, 
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  Users
+  AlertTriangle
 } from 'lucide-react'
 import { useRealTimeMetrics, useOrchestratorStatus } from '../hooks/useRealTimeMetrics'
 import { monitoringApi, jobsApi } from '../services/api'

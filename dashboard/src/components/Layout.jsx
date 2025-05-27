@@ -1,9 +1,9 @@
-import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { 
   Activity, 
   Database, 
   BarChart3, 
+  Brain,
   Settings, 
   Zap, 
   Wifi, 
@@ -13,7 +13,6 @@ import {
   TrendingUp,
   Mail
 } from 'lucide-react'
-import wsService from '../services/websocket'
 import { useRealTimeMetrics } from '../hooks/useRealTimeMetrics'
 
 function Layout({ children }) {
@@ -24,6 +23,7 @@ function Layout({ children }) {
     { name: 'Dashboard', href: '/', icon: Activity },
     { name: 'Sessions', href: '/sessions', icon: Database },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { name: 'Advanced Analytics', href: '/advanced-analytics', icon: Brain },
     { name: 'Companies', href: '/companies', icon: Building },
     { name: 'Opportunities', href: '/opportunities', icon: Target },
     { name: 'Market Analysis', href: '/market', icon: TrendingUp },
@@ -70,7 +70,7 @@ function Layout({ children }) {
                 role="status" 
                 aria-label="Current phase indicator"
               >
-                Phase 5B
+                Phase 7
               </div>
             </div>
           </div>

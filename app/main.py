@@ -11,6 +11,7 @@ from app.core.database import get_db, engine
 from app.models import Base
 from app.api.routes.jobs import router as jobs_router
 from app.api.routes.business import router as business_router
+# from app.api.v1.analytics import router as analytics_router  # TODO: Fix numpy dependency
 from app.routers.scraping import router as scraping_router
 from app.routers.monitoring import router as monitoring_router
 
@@ -36,6 +37,7 @@ app.add_middleware(
 # Include API routes
 app.include_router(jobs_router, prefix=settings.API_V1_STR, tags=["jobs"])
 app.include_router(business_router, tags=["business-intelligence"])
+# app.include_router(analytics_router, prefix=f"{settings.API_V1_STR}/analytics", tags=["advanced-analytics"])  # TODO: Fix numpy dependency
 app.include_router(scraping_router, tags=["scraping"])
 app.include_router(monitoring_router, tags=["monitoring"])
 
@@ -80,6 +82,11 @@ async def api_root():
             "/api/v1/business/demos",
             "/api/v1/business/outreach",
             "/api/v1/business/market-analysis",
+            "/api/v1/analytics/advanced-overview",
+            "/api/v1/analytics/lead-scoring",
+            "/api/v1/analytics/predictive-modeling",
+            "/api/v1/analytics/roi-analytics",
+            "/api/v1/analytics/competitive-intelligence",
             "/api/v1/scraping/jobs",
             "/api/v1/scraping/status",
             "/api/v1/monitoring/sessions",

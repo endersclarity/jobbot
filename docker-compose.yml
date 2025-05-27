@@ -89,7 +89,7 @@ services:
     build:
       context: ./dashboard
       dockerfile: Dockerfile
-      target: development
+      target: production
     container_name: jobbot-frontend-dev
     environment:
       - VITE_API_URL=http://localhost:8000
