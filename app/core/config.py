@@ -73,6 +73,11 @@ class Settings(BaseSettings):
     @property
     def database_url(self) -> str:
         """Construct database URL from components"""
+        # Check for DATABASE_URL environment variable first
+        database_url = os.getenv("DATABASE_URL")
+        if database_url:
+            return database_url
+            
         if not self.POSTGRES_HOST:
             # Use SQLite for development
             return "sqlite:///./jobbot.db"

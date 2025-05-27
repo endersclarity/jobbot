@@ -18,11 +18,28 @@ from app.models.business_intelligence import (
     DecisionMaker,
     BusinessOpportunity,
     OutreachRecord,
-    WebsiteAudit
+    WebsiteAudit,
+    Opportunity,
+    Demo,
+    OutreachCampaign,
+    OutreachContact,
+    BusinessMetric
+)
+from app.models.analytics import (
+    LeadScore,
+    ROIMetrics,
+    PredictiveModel,
+    ModelPrediction,
+    CompetitiveIntelligence,
+    AdvancedCampaign,
+    BusinessMetrics
 )
 
 __all__ = [
     "Base", "Job", "Application", "EmployerResponse", "Reference", "ReferenceUsage", "ExperienceClaim",
     "ScrapeSession", "SiteExecution", "SessionMetric", "SystemHealth", "AlertRule", "AlertInstance",
-    "Company", "CompanyTechStack", "DecisionMaker", "BusinessOpportunity", "OutreachRecord", "WebsiteAudit"
+    "Company", "CompanyTechStack", "DecisionMaker", "BusinessOpportunity", "OutreachRecord", "WebsiteAudit",
+    "Opportunity", "Demo", "OutreachCampaign", "OutreachContact", "BusinessMetric",
+    "LeadScore", "ROIMetrics", "PredictiveModel", "ModelPrediction", "CompetitiveIntelligence", 
+    "AdvancedCampaign", "BusinessMetrics"
 ]

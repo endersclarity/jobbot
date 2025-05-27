@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { 
   BarChart, 
@@ -11,43 +11,26 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
-  LineChart,
-  Line
+  Cell
 } from 'recharts'
 import { 
   TrendingUp, 
   Calendar, 
   Globe, 
   Target,
-  Download,
-  Filter
+  Download
 } from 'lucide-react'
-import { monitoringApi, jobsApi } from '../services/api'
+import { monitoringApi } from '../services/api'
 import MetricCard from './MetricCard'
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
 
 function Analytics() {
   const [timeRange, setTimeRange] = useState('7d')
-  const [selectedSite, setSelectedSite] = useState('all')
 
   // Fetch analytics data
-  const { data: jobStats, isLoading: jobStatsLoading } = useQuery({
-    queryKey: ['jobAnalytics', timeRange],
-    queryFn: () => jobsApi.getJobStats(),
-    select: (response) => response.data,
-    refetchInterval: 60000,
-  })
-
-  const { data: siteStats, isLoading: siteStatsLoading } = useQuery({
-    queryKey: ['siteAnalytics', timeRange],
-    queryFn: () => monitoringApi.getSiteStats(),
-    select: (response) => response.data,
-  })
-
-  const { data: performanceData, isLoading: performanceLoading } = useQuery({
-    queryKey: ['performanceAnalytics', timeRange],
+  const { isLoading } = useQuery({
+    queryKey: ['sessionMetrics', timeRange],
     queryFn: () => monitoringApi.getPerformanceMetrics(timeRange),
     select: (response) => response.data,
   })
@@ -113,7 +96,6 @@ function Analytics() {
   }
 
   const analyticsData = generateAnalyticsData()
-  const isLoading = jobStatsLoading || siteStatsLoading || performanceLoading
 
   const handleExportReport = () => {
     const reportData = {
