@@ -20,20 +20,22 @@ from app.models.business_intelligence import (
     OutreachContact,
     BusinessMetric
 )
-from app.models.analytics import (
-    LeadScore,
-    ROIMetrics,
-    PredictiveModel,
-    ModelPrediction,
-    CompetitiveIntelligence,
-    AdvancedCampaign,
-    BusinessMetrics
-)
+# TODO: Fix table name conflicts and numpy dependency
+# from app.models.analytics import (
+#     LeadScore,
+#     ROIMetrics,
+#     PredictiveModel,
+#     ModelPrediction,
+#     CompetitiveIntelligence,
+#     AdvancedCampaign,
+#     BusinessMetrics
+# )
 
 __all__ = [
     "Base", "Job", "Application", "EmployerResponse", "Reference", "ReferenceUsage", "ExperienceClaim",
     "ScrapeSession", "SiteExecution", "SessionMetric", "SystemHealth", "AlertRule", "AlertInstance",
     "Company", "Opportunity", "Demo", "OutreachCampaign", "OutreachContact", "BusinessMetric",
-    "LeadScore", "ROIMetrics", "PredictiveModel", "ModelPrediction", "CompetitiveIntelligence", 
-    "AdvancedCampaign", "BusinessMetrics"
+    # TODO: Re-add analytics models after fixing table conflicts
+    # "LeadScore", "ROIMetrics", "PredictiveModel", "ModelPrediction", "CompetitiveIntelligence", 
+    # "AdvancedCampaign", "BusinessMetrics"
 ]
