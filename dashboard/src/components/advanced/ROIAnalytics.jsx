@@ -312,7 +312,7 @@ const ROIAnalytics = ({ data }) => {
           <div className="flex items-center">
             <Target className="h-5 w-5 text-green-600 mr-2" />
             <span className="text-sm font-medium text-green-800">
-              Excellent LTV:CAC ratio! Industry benchmark is 3:1, you're achieving {roiData.customerLifetimeValue.ltvsToCAC.toFixed(1)}:1
+              Excellent LTV:CAC ratio! Industry benchmark is 3:1, you&apos;re achieving {roiData.customerLifetimeValue.ltvsToCAC.toFixed(1)}:1
             </span>
           </div>
         </div>
