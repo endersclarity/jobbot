@@ -32,6 +32,9 @@ class LeadScoreBase(BaseModel):
     budget_authority_score: float = 0.0
     timeline_score: float = 0.0
     confidence: float = Field(..., ge=0, le=100)
+    
+    class Config:
+        protected_namespaces = ()
 
 class LeadScoreCreate(LeadScoreBase):
     features_used: Optional[Dict[str, Any]] = None
@@ -91,6 +94,9 @@ class PredictiveModelBase(BaseModel):
     training_data_size: int = Field(..., gt=0)
     features_count: int = Field(..., gt=0)
     algorithm: str
+    
+    class Config:
+        protected_namespaces = ()
 
 class PredictiveModelCreate(PredictiveModelBase):
     features_list: List[str]
@@ -116,6 +122,9 @@ class ModelPredictionBase(BaseModel):
     confidence_score: float = Field(..., ge=0, le=100)
     target_date: datetime
     input_features: Dict[str, Any]
+    
+    class Config:
+        protected_namespaces = ()
 
 class ModelPredictionCreate(ModelPredictionBase):
     pass

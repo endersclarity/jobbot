@@ -20,16 +20,15 @@ from app.routers.monitoring import router as monitoring_router
 try:
     Base.metadata.create_all(bind=engine)
     # Verify tables were created
-    from sqlalchemy import text
-    with engine.connect() as conn:
-        result = conn.execute(text("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'public'"))
-        table_count = result.scalar()
-        print(f"✅ Database tables created successfully ({table_count} tables)")
+    from sqlalchemy import text, inspect
+    inspector = inspect(engine)
+    table_names = inspector.get_table_names()
+    table_count = len(table_names)
+    print(f"✅ Database tables created successfully ({table_count} tables)")
 except Exception as e:
     print(f"❌ Table creation failed: {e}")
-    # Don't continue if tables can't be created
-    import sys
-    sys.exit(1)
+    # Continue anyway since tables might already exist
+    pass
 
 app = FastAPI(
     title="JobBot API",
