@@ -11,7 +11,7 @@ import json
 import random
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional, Any
 from urllib.parse import urlencode
 import logging
 
@@ -19,7 +19,7 @@ import logging
 class IndeedScraper:
     """Raw data scraper for Indeed job listings"""
 
-    def __init__(self, base_dir: str = None):
+    def __init__(self, base_dir: Optional[str] = None):
         self.base_dir = Path(base_dir) if base_dir else Path(__file__).parent.parent.parent / "scraped_data"
         self.raw_dir = self.base_dir / "raw"
         self.logs_dir = self.base_dir / "logs"

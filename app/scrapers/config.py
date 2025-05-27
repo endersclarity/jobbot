@@ -36,7 +36,7 @@ class ScrapingConfig:
 class ScraperConfigManager:
     """Manages scraper configuration files"""
 
-    def __init__(self, config_path: str = None):
+    def __init__(self, config_path: Optional[str] = None):
         if config_path:
             self.config_path = Path(config_path)
         else:
