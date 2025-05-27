@@ -9,6 +9,7 @@ import CompanyDiscovery from './components/business/CompanyDiscovery'
 import OpportunityPipeline from './components/business/OpportunityPipeline'
 import MarketAnalysis from './components/business/MarketAnalysis'
 import OutreachCenter from './components/business/OutreachCenter'
+import AdvancedAnalytics from './components/advanced/AdvancedAnalytics'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/sessions" element={<ScrapingSessions />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/companies" element={<CompanyDiscovery />} />
         <Route path="/opportunities" element={<OpportunityPipeline />} />

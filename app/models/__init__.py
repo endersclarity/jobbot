@@ -20,9 +20,20 @@ from app.models.business_intelligence import (
     OutreachContact,
     BusinessMetric
 )
+from app.models.analytics import (
+    LeadScore,
+    ROIMetrics,
+    PredictiveModel,
+    ModelPrediction,
+    CompetitiveIntelligence,
+    AdvancedCampaign,
+    BusinessMetrics
+)
 
 __all__ = [
     "Base", "Job", "Application", "EmployerResponse", "Reference", "ReferenceUsage", "ExperienceClaim",
     "ScrapeSession", "SiteExecution", "SessionMetric", "SystemHealth", "AlertRule", "AlertInstance",
-    "Company", "Opportunity", "Demo", "OutreachCampaign", "OutreachContact", "BusinessMetric"
+    "Company", "Opportunity", "Demo", "OutreachCampaign", "OutreachContact", "BusinessMetric",
+    "LeadScore", "ROIMetrics", "PredictiveModel", "ModelPrediction", "CompetitiveIntelligence", 
+    "AdvancedCampaign", "BusinessMetrics"
 ]
