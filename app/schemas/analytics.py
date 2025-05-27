@@ -305,7 +305,7 @@ class BatchLeadScoreResponse(BaseModel):
     errors: Optional[List[Dict[str, str]]] = None
 
 class AdvancedAnalyticsRequest(BaseModel):
-    time_range: str = Field("30d", regex="^(7d|30d|90d|1y)$")
+    time_range: str = Field("30d", pattern="^(7d|30d|90d|1y)$")
     metrics: List[str] = ["revenue", "leads", "conversion", "roi"]
     include_predictions: bool = True
     include_competitive: bool = False
