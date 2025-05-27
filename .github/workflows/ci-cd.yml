@@ -71,7 +71,7 @@ jobs:
 
     - name: Type check with mypy
       run: |
-        mypy app/
+        mypy --config-file=mypy.ini app/
 
     - name: Format check with black
       run: |
