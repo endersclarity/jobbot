@@ -14,7 +14,7 @@ from app.models.analytics import (
     LeadScore, ROIMetrics, PredictiveModel, ModelPrediction, 
     CompetitiveIntelligence, AdvancedCampaign, BusinessMetrics
 )
-from app.models.business import Company, Opportunity
+from app.models.business_intelligence import Company, Opportunity
 from app.schemas.analytics import (
     LeadScoreResponse, ROIMetricsResponse, PredictiveAnalyticsResponse,
     CompetitiveIntelligenceResponse, CampaignAnalyticsResponse, BusinessMetricsResponse
