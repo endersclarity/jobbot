@@ -239,10 +239,10 @@ class ClientAcquisitionPipeline:
                 'market_stability': 'stable'
             },
             'key_assumptions': [
-                f"Historical conversion rates apply to current pipeline",
+                "Historical conversion rates apply to current pipeline",
                 f"Average sales cycle of {self._calculate_average_sales_cycle()} days",
-                f"No major market disruptions",
-                f"Current outreach effectiveness continues"
+                "No major market disruptions",
+                "Current outreach effectiveness continues"
             ]
         }
     

@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const API_BASE_URL = 'http://172.22.206.209:8000'
+const API_BASE_URL = 'http://172.22.206.209:8001'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 60000, // 60 seconds for scraping operations
   headers: {
     'Content-Type': 'application/json',
   },
@@ -23,8 +23,8 @@ api.interceptors.response.use(
 export const monitoringApi = {
   // System health and status
   getHealth: () => api.get('/health'),
-  getSystemStatus: () => api.get('/api/v1/monitoring/status'),
-  getSystemMetrics: () => api.get('/api/v1/monitoring/metrics'),
+  getSystemStatus: () => api.get('/api/v1/monitoring/health'),
+  getSystemMetrics: () => api.get('/api/v1/monitoring/health'),
   
   // Scraping sessions
   getScrapingSessions: (params = {}) => api.get('/api/v1/monitoring/sessions', { params }),
@@ -58,6 +58,20 @@ export const jobsApi = {
   updateJob: (jobId, data) => api.put(`/api/v1/jobs/${jobId}`, data),
   deleteJob: (jobId) => api.delete(`/api/v1/jobs/${jobId}`),
   getJobStats: () => api.get('/api/v1/jobs/stats'),
+}
+
+// Scraping API endpoints
+export const scrapingApi = {
+  // Job scraping
+  scrapeJobs: (data) => api.post('/api/v1/scraping/jobs', data),
+  scrapeJobsBackground: (data) => api.post('/api/v1/scraping/jobs/background', data),
+  scrapeMultiSite: (data) => api.post('/api/v1/scraping/jobs/multi-site', data),
+  
+  // Scraping status and info
+  getScrapingStatus: () => api.get('/api/v1/scraping/status'),
+  getSupportedSites: () => api.get('/api/v1/scraping/sites'),
+  getEconomics: () => api.get('/api/v1/scraping/economics'),
+  getOrchestratorStatus: () => api.get('/api/v1/scraping/orchestrator/status'),
 }
 
 export default api
