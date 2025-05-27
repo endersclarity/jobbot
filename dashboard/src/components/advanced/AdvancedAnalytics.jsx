@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { 
-  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell,
-  ScatterChart, Scatter, Area, AreaChart
+  Area, AreaChart
 } from 'recharts'
 import { 
-  TrendingUp, DollarSign, Target, Users, Brain, 
-  Activity, AlertCircle, CheckCircle, Clock, Award
+  TrendingUp, DollarSign, Target, Users, Award
 } from 'lucide-react'
 import PredictiveModeling from './PredictiveModeling'
 import ROIAnalytics from './ROIAnalytics'
@@ -14,9 +13,7 @@ import LeadScoringAnalytics from './LeadScoringAnalytics'
 
 const AdvancedAnalytics = () => {
   const [timeRange, setTimeRange] = useState('30d')
-  const [selectedMetrics, setSelectedMetrics] = useState(['revenue', 'conversion', 'roi'])
   const [analyticsData, setAnalyticsData] = useState(null)
-  const [predictiveData, setPredictiveData] = useState(null)
   const [loading, setLoading] = useState(true)
 
   // Mock data - replace with API calls

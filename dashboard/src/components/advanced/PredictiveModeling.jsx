@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
-  Legend, ResponsiveContainer, ScatterChart, Scatter, Area, AreaChart
+  XAxis, YAxis, CartesianGrid, Tooltip, 
+  Legend, ResponsiveContainer, Area, AreaChart
 } from 'recharts'
 import { Brain, TrendingUp, AlertTriangle, Target, Calendar } from 'lucide-react'
 
 const PredictiveModeling = ({ data }) => {
   const [selectedModel, setSelectedModel] = useState('revenue')
-  const [confidence, setConfidence] = useState(85)
+  const [confidence] = useState(85)
   const [predictions, setPredictions] = useState(null)
   const [loading, setLoading] = useState(false)
 

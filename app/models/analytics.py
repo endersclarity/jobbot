@@ -200,7 +200,7 @@ class AdvancedCampaign(Base):
 
 class BusinessMetrics(Base):
     """Daily/weekly/monthly business metrics aggregation"""
-    __tablename__ = "business_metrics"
+    __tablename__ = "analytics_business_metrics"
 
     id = Column(Integer, primary_key=True, index=True)
     metric_date = Column(DateTime(timezone=True), nullable=False, index=True)
