@@ -32,6 +32,9 @@ class LeadScoreBase(BaseModel):
     budget_authority_score: float = 0.0
     timeline_score: float = 0.0
     confidence: float = Field(..., ge=0, le=100)
+    
+    class Config:
+        protected_namespaces = ()
 
 class LeadScoreCreate(LeadScoreBase):
     features_used: Optional[Dict[str, Any]] = None
@@ -91,6 +94,9 @@ class PredictiveModelBase(BaseModel):
     training_data_size: int = Field(..., gt=0)
     features_count: int = Field(..., gt=0)
     algorithm: str
+    
+    class Config:
+        protected_namespaces = ()
 
 class PredictiveModelCreate(PredictiveModelBase):
     features_list: List[str]
@@ -116,6 +122,9 @@ class ModelPredictionBase(BaseModel):
     confidence_score: float = Field(..., ge=0, le=100)
     target_date: datetime
     input_features: Dict[str, Any]
+    
+    class Config:
+        protected_namespaces = ()
 
 class ModelPredictionCreate(ModelPredictionBase):
     pass
@@ -305,7 +314,7 @@ class BatchLeadScoreResponse(BaseModel):
     errors: Optional[List[Dict[str, str]]] = None
 
 class AdvancedAnalyticsRequest(BaseModel):
-    time_range: str = Field("30d", regex="^(7d|30d|90d|1y)$")
+    time_range: str = Field("30d", pattern="^(7d|30d|90d|1y)$")
     metrics: List[str] = ["revenue", "leads", "conversion", "roi"]
     include_predictions: bool = True
     include_competitive: bool = False

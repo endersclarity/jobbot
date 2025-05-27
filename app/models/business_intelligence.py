@@ -60,6 +60,7 @@ class Company(Base):
     opportunities = relationship("Opportunity", back_populates="company", cascade="all, delete-orphan")
     demos = relationship("Demo", back_populates="company", cascade="all, delete-orphan")
     outreach_contacts = relationship("OutreachContact", back_populates="company", cascade="all, delete-orphan")
+    lead_scores = relationship("LeadScore", back_populates="company", cascade="all, delete-orphan")
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

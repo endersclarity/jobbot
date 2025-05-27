@@ -4,6 +4,7 @@ JobBot Main Application Entry Point
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 import uvicorn
 
 from app.core.config import settings
@@ -11,12 +12,23 @@ from app.core.database import get_db, engine
 from app.models import Base
 from app.api.routes.jobs import router as jobs_router
 from app.api.routes.business import router as business_router
-# from app.api.v1.analytics import router as analytics_router  # TODO: Fix numpy dependency
+from app.api.v1.analytics import router as analytics_router
 from app.routers.scraping import router as scraping_router
 from app.routers.monitoring import router as monitoring_router
 
 # Create tables (for development - use Alembic in production)
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    # Verify tables were created
+    from sqlalchemy import text, inspect
+    inspector = inspect(engine)
+    table_names = inspector.get_table_names()
+    table_count = len(table_names)
+    print(f"✅ Database tables created successfully ({table_count} tables)")
+except Exception as e:
+    print(f"❌ Table creation failed: {e}")
+    # Continue anyway since tables might already exist
+    pass
 
 app = FastAPI(
     title="JobBot API",
@@ -37,7 +49,7 @@ app.add_middleware(
 # Include API routes
 app.include_router(jobs_router, prefix=settings.API_V1_STR, tags=["jobs"])
 app.include_router(business_router, tags=["business-intelligence"])
-# app.include_router(analytics_router, prefix=f"{settings.API_V1_STR}/analytics", tags=["advanced-analytics"])  # TODO: Fix numpy dependency
+app.include_router(analytics_router, prefix=f"{settings.API_V1_STR}/analytics", tags=["advanced-analytics"])
 app.include_router(scraping_router, tags=["scraping"])
 app.include_router(monitoring_router, tags=["monitoring"])
 
@@ -53,7 +65,7 @@ async def health_check(db: Session = Depends(get_db)):
     """Detailed health check endpoint with database connectivity test"""
     try:
         # Test database connection
-        db.execute("SELECT 1")
+        db.execute(text("SELECT 1"))
         db_status = "connected"
     except Exception as e:
         db_status = f"error: {str(e)}"
