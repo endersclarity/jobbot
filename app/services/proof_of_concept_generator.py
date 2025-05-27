@@ -5,16 +5,13 @@ Automatically generates working demonstrations, website improvements,
 and proof-of-concept solutions for identified business opportunities.
 """
 
-import asyncio
 import json
-import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List
 from sqlalchemy.orm import Session
 
-from app.models.business_intelligence import Company, BusinessOpportunity, CompanyTechStack
-from app.services.intelligence_generator import BusinessIntelligenceReportGenerator
+from app.models.business_intelligence import Company, CompanyTechStack
 
 
 class ProofOfConceptGenerator:

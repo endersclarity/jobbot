@@ -5,18 +5,14 @@ Manages personalized email sequences, LinkedIn outreach, follow-up automation,
 and response tracking for business development campaigns.
 """
 
-import asyncio
 import json
-import smtplib
 from datetime import datetime, timedelta
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 from sqlalchemy.orm import Session
 
 from app.models.business_intelligence import (
-    Company, DecisionMaker, BusinessOpportunity, OutreachRecord
+    Company, DecisionMaker, OutreachRecord
 )
 from app.services.intelligence_generator import BusinessIntelligenceReportGenerator
 
@@ -149,7 +145,7 @@ class OutreachCampaignManager:
         try:
             report = await intelligence_generator.generate_company_intelligence_report(company.id)
             outreach_strategy = report.get('outreach_strategy', {})
-        except:
+        except Exception:
             outreach_strategy = {}
         
         # Base personalization data

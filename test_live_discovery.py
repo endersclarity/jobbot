@@ -6,7 +6,6 @@ Test the complete live business discovery and intelligence generation system.
 
 import asyncio
 import logging
-from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.cli.live_discovery import LiveBusinessDiscovery

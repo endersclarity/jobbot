@@ -13,7 +13,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.models.business_intelligence import Company, DecisionMaker, BusinessOpportunity
+from app.models.business_intelligence import Company, BusinessOpportunity
 from app.scrapers.business_discovery import BusinessDirectoryScaper, LinkedInCompanyScraper
 from app.analysis.tech_stack_detector import TechStackDetector
 from app.analysis.opportunity_scorer import OpportunityScorer

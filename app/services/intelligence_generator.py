@@ -5,10 +5,9 @@ Generates comprehensive business intelligence reports with specific
 improvement recommendations, ROI calculations, and actionable insights.
 """
 
-import asyncio
 import json
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Dict, List
 from sqlalchemy.orm import Session
 from pathlib import Path
 

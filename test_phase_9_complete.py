@@ -9,7 +9,7 @@ pipeline management, and performance analytics.
 import asyncio
 import logging
 from datetime import datetime
-from sqlalchemy.orm import Session
+from typing import Dict, List
 
 from app.core.database import get_db
 from app.cli.live_discovery import LiveBusinessDiscovery
@@ -18,7 +18,7 @@ from app.services.proof_of_concept_generator import ProofOfConceptGenerator
 from app.services.outreach_automation import OutreachCampaignManager
 from app.services.pipeline_management import ClientAcquisitionPipeline
 from app.services.performance_analytics import PerformanceAnalytics
-from app.models.business_intelligence import Company, DecisionMaker, BusinessOpportunity
+from app.models.business_intelligence import Company, BusinessOpportunity
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -112,7 +112,7 @@ class Phase9TestSuite:
             assert 'companies_analyzed' in summary, "Missing companies_analyzed metric"
             assert 'opportunities_created' in summary, "Missing opportunities_created metric"
             
-            logger.info(f"  ✅ Discovery campaign completed")
+            logger.info("  ✅ Discovery campaign completed")
             logger.info(f"     Companies discovered: {summary['companies_discovered']}")
             logger.info(f"     Websites analyzed: {summary['companies_analyzed']}")
             logger.info(f"     Opportunities created: {summary['opportunities_created']}")
@@ -151,7 +151,7 @@ class Phase9TestSuite:
             assert 'key_findings' in exec_summary, "Missing key findings"
             assert 'next_actions' in exec_summary, "Missing next actions"
             
-            logger.info(f"  ✅ Intelligence report generated successfully")
+            logger.info("  ✅ Intelligence report generated successfully")
             logger.info(f"     Company: {test_company.name}")
             logger.info(f"     Report file: {report['report_metadata']['file_path']}")
             
@@ -187,7 +187,7 @@ class Phase9TestSuite:
                 assert 'technology_modernization' in poc_result, "Missing tech modernization POC"
                 assert 'digital_marketing' in poc_result, "Missing digital marketing POC"
             
-            logger.info(f"  ✅ Proof-of-concept generated successfully")
+            logger.info("  ✅ Proof-of-concept generated successfully")
             logger.info(f"     Type: {poc_result['poc_type']}")
             logger.info(f"     Estimated value: ${poc_result['estimated_value']:,.0f}")
             logger.info(f"     Deliverables: {len(poc_result['deliverables'])}")
@@ -344,7 +344,7 @@ class Phase9TestSuite:
                 test_company = await self._create_test_company("E2E Test Company")
             
             # 3. Generate intelligence report
-            intelligence_report = await self.intelligence_generator.generate_company_intelligence_report(
+            await self.intelligence_generator.generate_company_intelligence_report(
                 test_company.id
             )
             

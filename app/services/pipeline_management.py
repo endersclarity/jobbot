@@ -5,16 +5,14 @@ Manages the complete sales pipeline from initial contact through
 contract signing, with CRM integration and automated workflow management.
 """
 
-import asyncio
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 from sqlalchemy.orm import Session
-from sqlalchemy import func
 
 from app.models.business_intelligence import (
-    Company, DecisionMaker, BusinessOpportunity, OutreachRecord
+    Company, BusinessOpportunity, OutreachRecord
 )
 
 

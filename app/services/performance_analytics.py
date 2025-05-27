@@ -5,16 +5,15 @@ Comprehensive tracking and analysis of business development KPIs,
 ROI metrics, and performance optimization for live market operations.
 """
 
-import asyncio
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List
 from sqlalchemy.orm import Session
-from sqlalchemy import func, text
+from sqlalchemy import func
 
 from app.models.business_intelligence import (
-    Company, DecisionMaker, BusinessOpportunity, OutreachRecord
+    Company, BusinessOpportunity, OutreachRecord
 )
 
 
@@ -216,7 +215,7 @@ class PerformanceAnalytics:
         # Responses received
         responses_received = self.db.query(OutreachRecord).filter(
             OutreachRecord.updated_at >= start_date,
-            OutreachRecord.response_received == True
+            OutreachRecord.response_received
         ).count()
         
         # Positive responses
@@ -228,7 +227,7 @@ class PerformanceAnalytics:
         # Meetings scheduled
         meetings_scheduled = self.db.query(OutreachRecord).filter(
             OutreachRecord.updated_at >= start_date,
-            OutreachRecord.meeting_scheduled == True
+            OutreachRecord.meeting_scheduled
         ).count()
         
         # Calculate rates
@@ -707,8 +706,6 @@ class PerformanceAnalytics:
     
     async def _get_current_metrics(self) -> Dict:
         """Get current real-time metrics"""
-        
-        today = datetime.now().date()
         
         return {
             'today_outreach_sent': 12,  # Mock data
