@@ -1,0 +1,84 @@
+# JobBot Grafana Datasources Configuration
+# Automatic provisioning of data sources for production monitoring
+
+apiVersion: 1
+
+datasources:
+  # Prometheus - Metrics Data Source
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+    jsonData:
+      timeInterval: "15s"
+      queryTimeout: "60s"
+      httpMethod: "POST"
+      manageAlerts: true
+      prometheusType: "Prometheus"
+      prometheusVersion: "2.40.0"
+      cacheLevel: "High"
+      disableMetricsLookup: false
+      customQueryParameters: ""
+      exemplarTraceIdDestinations:
+        - name: "trace_id"
+          datasourceUid: "loki_uid"
+
+  # Loki - Logs Data Source
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    uid: "loki_uid"
+    editable: true
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        - matcherRegex: "trace_id=(\\w+)"
+          name: "TraceID"
+          url: "$${__value.raw}"
+          datasourceUid: "tempo_uid"
+        - matcherRegex: "request_id=(\\w+)"
+          name: "RequestID"
+          url: "$${__value.raw}"
+        - matcherRegex: "user_id=(\\w+)"
+          name: "UserID"
+          url: "$${__value.raw}"
+
+  # JobBot Database - PostgreSQL Data Source
+  - name: JobBot-Database
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    database: jobbot_prod
+    user: jobbot_readonly
+    editable: true
+    secureJsonData:
+      password: "${POSTGRES_READONLY_PASSWORD}"
+    jsonData:
+      sslmode: "require"
+      maxOpenConns: 5
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+      postgresVersion: 1500
+      timescaledb: false
+
+  # Redis Data Source (if redis-datasource plugin is installed)
+  - name: Redis
+    type: redis-datasource
+    access: proxy
+    url: redis://redis:6379
+    editable: true
+    jsonData:
+      client: "standalone"
+      poolSize: 5
+      timeout: 10
+      pingInterval: 0
+      pipelineWindow: 0
+    secureJsonData:
+      password: "${REDIS_PASSWORD}"
+
+deleteDatasources:
+  - name: TestData DB
+    orgId: 1
