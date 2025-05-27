@@ -20,7 +20,7 @@ import {
   Target,
   Download
 } from 'lucide-react'
-import { monitoringApi, jobsApi } from '../services/api'
+import { monitoringApi } from '../services/api'
 import MetricCard from './MetricCard'
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
@@ -29,7 +29,7 @@ function Analytics() {
   const [timeRange, setTimeRange] = useState('7d')
 
   // Fetch analytics data
-  const { data: sessionMetrics, isLoading: sessionLoading } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['sessionMetrics', timeRange],
     queryFn: () => monitoringApi.getPerformanceMetrics(timeRange),
     select: (response) => response.data,
@@ -96,7 +96,6 @@ function Analytics() {
   }
 
   const analyticsData = generateAnalyticsData()
-  const isLoading = jobStatsLoading || siteStatsLoading || performanceLoading
 
   const handleExportReport = () => {
     const reportData = {

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { 
   Activity, 
@@ -14,7 +13,6 @@ import {
   TrendingUp,
   Mail
 } from 'lucide-react'
-import wsService from '../services/websocket'
 import { useRealTimeMetrics } from '../hooks/useRealTimeMetrics'
 
 function Layout({ children }) {
