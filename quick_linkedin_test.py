@@ -3,11 +3,11 @@
 Quick LinkedIn test using Browser MCP approach
 """
 
+import requests
+from bs4 import BeautifulSoup
+
 def test_linkedin_access():
     """Test what we can access on LinkedIn without complex automation"""
-    
-    import requests
-    from bs4 import BeautifulSoup
     
     # Test direct HTTP access first
     headers = {

@@ -9,8 +9,6 @@ import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 def test_linkedin_scraping():
     """Test LinkedIn job scraping capabilities"""
@@ -92,8 +90,8 @@ def test_linkedin_scraping():
                 print(f"⚠️ Error extracting job {i}: {e}")
         
         # Results summary
-        print(f"\n📋 LINKEDIN SCRAPING RESULTS:")
-        print(f"✅ Page loaded successfully")
+        print("\n📋 LINKEDIN SCRAPING RESULTS:")
+        print("✅ Page loaded successfully")
         print(f"📊 Total job count: {job_count}")
         print(f"🎯 Job elements found: {len(jobs_found)}")
         print(f"📝 Successfully extracted: {len(extracted_jobs)} jobs")
