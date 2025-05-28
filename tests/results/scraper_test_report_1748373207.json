@@ -1,0 +1,86 @@
+{
+  "summary": {
+    "total_tests": 8,
+    "passed_tests": 2,
+    "failed_tests": 6,
+    "success_rate": 25.0
+  },
+  "results": [
+    {
+      "test": "Node.js Availability",
+      "success": true,
+      "timestamp": 1748373179.1675103,
+      "details": {
+        "version": "v18.19.1",
+        "summary": "Node.js v18.19.1 available"
+      }
+    },
+    {
+      "test": "Scraper Dependencies",
+      "success": true,
+      "timestamp": 1748373179.7582283,
+      "details": {
+        "crawlee_status": "installed",
+        "summary": "Dependencies installed successfully"
+      }
+    },
+    {
+      "test": "CSS Selectors Test",
+      "success": false,
+      "timestamp": 1748373179.8361537,
+      "details": {
+        "error": "file:///home/ender/.claude/projects/job-search-automation/tests/temp_selector_test.js:2\nconst { chromium } = require('playwright');\n                     ^\n\nReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/home/ender/.claude/projects/job-search-automation/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at file:///home/ender/.claude/projects/job-search-automation/tests/temp_selector_test.js:2:22\n    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:336:24)\n    at async loadESM (node:internal/process/esm_loader:34:7)\n    at async handleMainPromise (node:internal/modules/run_main:106:12)\n\nNode.js v18.19.1\n"
+      }
+    },
+    {
+      "test": "Direct Scraping: software engineer",
+      "success": false,
+      "timestamp": 1748373180.4414933,
+      "details": {
+        "error": "node:internal/errors:496\n    ErrorCaptureStackTrace(err);\n    ^\n\nTypeError [ERR_PARSE_ARGS_UNKNOWN_OPTION]: Unknown option '--max-jobs'\n    at new NodeError (node:internal/errors:405:5)\n    at checkOptionUsage (node:internal/util/parse_args/parse_args:98:11)\n    at node:internal/util/parse_args/parse_args:360:9\n    at Array.forEach (<anonymous>)\n    at parseArgs (node:internal/util/parse_args/parse_args:357:3)\n    at file:///home/ender/.claude/projects/job-search-automation/src/crawlee-scraper.js:19:26\n    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:336:24)\n    at async loadESM (node:internal/process/esm_loader:34:7)\n    at async handleMainPromise (node:internal/modules/run_main:106:12) {\n  code: 'ERR_PARSE_ARGS_UNKNOWN_OPTION'\n}\n\nNode.js v18.19.1\n",
+        "stdout": "",
+        "return_code": 1
+      }
+    },
+    {
+      "test": "Direct Scraping: python developer",
+      "success": false,
+      "timestamp": 1748373186.0161166,
+      "details": {
+        "error": "node:internal/errors:496\n    ErrorCaptureStackTrace(err);\n    ^\n\nTypeError [ERR_PARSE_ARGS_UNKNOWN_OPTION]: Unknown option '--max-jobs'\n    at new NodeError (node:internal/errors:405:5)\n    at checkOptionUsage (node:internal/util/parse_args/parse_args:98:11)\n    at node:internal/util/parse_args/parse_args:360:9\n    at Array.forEach (<anonymous>)\n    at parseArgs (node:internal/util/parse_args/parse_args:357:3)\n    at file:///home/ender/.claude/projects/job-search-automation/src/crawlee-scraper.js:19:26\n    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:336:24)\n    at async loadESM (node:internal/process/esm_loader:34:7)\n    at async handleMainPromise (node:internal/modules/run_main:106:12) {\n  code: 'ERR_PARSE_ARGS_UNKNOWN_OPTION'\n}\n\nNode.js v18.19.1\n",
+        "stdout": "",
+        "return_code": 1
+      }
+    },
+    {
+      "test": "Direct Scraping: javascript developer",
+      "success": false,
+      "timestamp": 1748373191.5784166,
+      "details": {
+        "error": "node:internal/errors:496\n    ErrorCaptureStackTrace(err);\n    ^\n\nTypeError [ERR_PARSE_ARGS_UNKNOWN_OPTION]: Unknown option '--max-jobs'\n    at new NodeError (node:internal/errors:405:5)\n    at checkOptionUsage (node:internal/util/parse_args/parse_args:98:11)\n    at node:internal/util/parse_args/parse_args:360:9\n    at Array.forEach (<anonymous>)\n    at parseArgs (node:internal/util/parse_args/parse_args:357:3)\n    at file:///home/ender/.claude/projects/job-search-automation/src/crawlee-scraper.js:19:26\n    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:336:24)\n    at async loadESM (node:internal/process/esm_loader:34:7)\n    at async handleMainPromise (node:internal/modules/run_main:106:12) {\n  code: 'ERR_PARSE_ARGS_UNKNOWN_OPTION'\n}\n\nNode.js v18.19.1\n",
+        "stdout": "",
+        "return_code": 1
+      }
+    },
+    {
+      "test": "Direct Scraping: react developer",
+      "success": false,
+      "timestamp": 1748373197.1374104,
+      "details": {
+        "error": "node:internal/errors:496\n    ErrorCaptureStackTrace(err);\n    ^\n\nTypeError [ERR_PARSE_ARGS_UNKNOWN_OPTION]: Unknown option '--max-jobs'\n    at new NodeError (node:internal/errors:405:5)\n    at checkOptionUsage (node:internal/util/parse_args/parse_args:98:11)\n    at node:internal/util/parse_args/parse_args:360:9\n    at Array.forEach (<anonymous>)\n    at parseArgs (node:internal/util/parse_args/parse_args:357:3)\n    at file:///home/ender/.claude/projects/job-search-automation/src/crawlee-scraper.js:19:26\n    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:336:24)\n    at async loadESM (node:internal/process/esm_loader:34:7)\n    at async handleMainPromise (node:internal/modules/run_main:106:12) {\n  code: 'ERR_PARSE_ARGS_UNKNOWN_OPTION'\n}\n\nNode.js v18.19.1\n",
+        "stdout": "",
+        "return_code": 1
+      }
+    },
+    {
+      "test": "Direct Scraping: software engineer",
+      "success": false,
+      "timestamp": 1748373202.7090106,
+      "details": {
+        "error": "node:internal/errors:496\n    ErrorCaptureStackTrace(err);\n    ^\n\nTypeError [ERR_PARSE_ARGS_UNKNOWN_OPTION]: Unknown option '--max-jobs'\n    at new NodeError (node:internal/errors:405:5)\n    at checkOptionUsage (node:internal/util/parse_args/parse_args:98:11)\n    at node:internal/util/parse_args/parse_args:360:9\n    at Array.forEach (<anonymous>)\n    at parseArgs (node:internal/util/parse_args/parse_args:357:3)\n    at file:///home/ender/.claude/projects/job-search-automation/src/crawlee-scraper.js:19:26\n    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:336:24)\n    at async loadESM (node:internal/process/esm_loader:34:7)\n    at async handleMainPromise (node:internal/modules/run_main:106:12) {\n  code: 'ERR_PARSE_ARGS_UNKNOWN_OPTION'\n}\n\nNode.js v18.19.1\n",
+        "stdout": "",
+        "return_code": 1
+      }
+    }
+  ]
+}

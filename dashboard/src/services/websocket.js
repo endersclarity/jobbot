@@ -7,7 +7,7 @@ class WebSocketService {
     this.isConnected = false
   }
 
-  connect(url = 'ws://172.22.206.209:8000') {
+  connect(url = 'ws://172.22.206.209:8001') {
     if (this.socket?.connected) {
       return this.socket
     }

@@ -11,7 +11,8 @@ import {
   Building,
   Target,
   TrendingUp,
-  Mail
+  Mail,
+  Search
 } from 'lucide-react'
 import { useRealTimeMetrics } from '../hooks/useRealTimeMetrics'
 
@@ -21,6 +22,7 @@ function Layout({ children }) {
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Activity },
+    { name: 'Job Scraper', href: '/scrape', icon: Search },
     { name: 'Sessions', href: '/sessions', icon: Database },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Advanced Analytics', href: '/advanced-analytics', icon: Brain },

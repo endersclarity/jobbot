@@ -396,7 +396,7 @@ Best,
             f"I'd love to learn more about {company.name}'s automation journey",
             f"Hope you're having a great week at {company.name}",
             f"I'm excited about the potential to help {company.name} grow",
-            f"Looking forward to potentially working together"
+            "Looking forward to potentially working together"
         ]
         
         if contact.linkedin_url:

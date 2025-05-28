@@ -1,0 +1,127 @@
+{
+  "summary": {
+    "total_tests": 9,
+    "passed_tests": 9,
+    "failed_tests": 0,
+    "success_rate": 100.0
+  },
+  "results": [
+    {
+      "test": "Health Endpoint",
+      "success": true,
+      "timestamp": 1748372998.1798806,
+      "details": {
+        "status_code": 200,
+        "response_time": "0.00s",
+        "database_status": "connected",
+        "summary": "Health check passed in 0.00s"
+      }
+    },
+    {
+      "test": "Scraping Status",
+      "success": true,
+      "timestamp": 1748372998.2000504,
+      "details": {
+        "status_code": 200,
+        "response_time": "0.02s",
+        "crawlee_available": true,
+        "node_version": "v18.19.1",
+        "summary": "Crawlee status: healthy"
+      }
+    },
+    {
+      "test": "Supported Sites",
+      "success": true,
+      "timestamp": 1748372998.201366,
+      "details": {
+        "status_code": 200,
+        "supported_sites": 1,
+        "sites": [
+          "indeed"
+        ],
+        "summary": "Found 1 supported sites"
+      }
+    },
+    {
+      "test": "Economics Endpoint",
+      "success": true,
+      "timestamp": 1748372998.2024975,
+      "details": {
+        "status_code": 200,
+        "lunch_status": "\ud83c\udf7d\ufe0f EATEN! \ud83d\udc80",
+        "our_cost": 0.0,
+        "summary": "Economics: \ud83c\udf7d\ufe0f EATEN! \ud83d\udc80"
+      }
+    },
+    {
+      "test": "Scraping: software engineer in San Francisco, CA",
+      "success": true,
+      "timestamp": 1748373010.3907182,
+      "details": {
+        "status_code": 200,
+        "response_time": "12.19s",
+        "jobs_found": 0,
+        "jobs_saved": 0,
+        "duplicates_skipped": 0,
+        "success": true,
+        "summary": "Found 0 jobs, saved 0"
+      }
+    },
+    {
+      "test": "Scraping: data scientist in New York, NY",
+      "success": true,
+      "timestamp": 1748373023.8630981,
+      "details": {
+        "status_code": 200,
+        "response_time": "11.47s",
+        "jobs_found": 0,
+        "jobs_saved": 0,
+        "duplicates_skipped": 0,
+        "success": true,
+        "summary": "Found 0 jobs, saved 0"
+      }
+    },
+    {
+      "test": "Scraping: python developer in Remote",
+      "success": true,
+      "timestamp": 1748373037.45989,
+      "details": {
+        "status_code": 200,
+        "response_time": "11.60s",
+        "jobs_found": 0,
+        "jobs_saved": 0,
+        "duplicates_skipped": 0,
+        "success": true,
+        "summary": "Found 0 jobs, saved 0"
+      }
+    },
+    {
+      "test": "Scraping: software engineer in Grass Valley, CA",
+      "success": true,
+      "timestamp": 1748373051.180703,
+      "details": {
+        "status_code": 200,
+        "response_time": "11.72s",
+        "jobs_found": 0,
+        "jobs_saved": 0,
+        "duplicates_skipped": 0,
+        "success": true,
+        "summary": "Found 0 jobs, saved 0"
+      }
+    },
+    {
+      "test": "Scraping: web developer in Austin, TX",
+      "success": true,
+      "timestamp": 1748373064.8340373,
+      "details": {
+        "status_code": 200,
+        "response_time": "11.65s",
+        "jobs_found": 0,
+        "jobs_saved": 0,
+        "duplicates_skipped": 0,
+        "success": true,
+        "summary": "Found 0 jobs, saved 0"
+      }
+    }
+  ]
+}

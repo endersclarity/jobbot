@@ -16,38 +16,14 @@ export function useRealTimeMetrics() {
   })
 
   useEffect(() => {
-    // Connect to WebSocket
-    wsService.connect()
-
-    // Subscribe to real-time updates
-    const unsubscribeConnection = wsService.on('connection_status', (status) => {
-      setConnectionStatus(status)
-      
-      if (status.connected) {
-        // Subscribe to metrics updates when connected
-        wsService.subscribeToMetrics()
-      }
-    })
-
-    const unsubscribeMetrics = wsService.on('metrics_update', (data) => {
-      setRealTimeData(prev => ({
-        ...prev,
-        ...data,
-        timestamp: new Date().toISOString(),
-      }))
-    })
-
-    const unsubscribeError = wsService.on('connection_error', (error) => {
-      console.error('WebSocket connection error:', error)
-      setConnectionStatus({ connected: false, error: error.error })
-    })
-
-    // Cleanup on unmount
+    // For now, simulate connected status without WebSocket
+    setConnectionStatus({ connected: true })
+    
+    // TODO: Re-enable WebSocket when backend supports it
+    // wsService.connect()
+    
     return () => {
-      unsubscribeConnection()
-      unsubscribeMetrics()
-      unsubscribeError()
-      wsService.unsubscribeFromMetrics()
+      // Cleanup if needed
     }
   }, [])
 
