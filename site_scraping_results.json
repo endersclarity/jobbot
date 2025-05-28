@@ -1,0 +1,30 @@
+{
+  "Indeed (Main Scraper)": {
+    "success": false,
+    "jobs_found": 0,
+    "is_demo_data": false,
+    "output_preview": "\ud83d\udd0d Starting Crawlee domination for: \"software engineer\" in \"remote\"\n\ud83d\udccb Queueing 1 URLs for extraction...\n\u001b[32mINFO\u001b[39m \u001b[33m PlaywrightCrawler:\u001b[39m Starting the crawler.\n\u001b[32mINFO\u001b[39m \u001b[33m Playwrigh",
+    "error_preview": ""
+  },
+  "Indeed (Dedicated)": {
+    "success": true,
+    "jobs_found": 0,
+    "is_demo_data": false,
+    "output_preview": "",
+    "error_preview": ""
+  },
+  "Glassdoor (Dedicated)": {
+    "success": false,
+    "jobs_found": 0,
+    "is_demo_data": false,
+    "output_preview": "",
+    "error_preview": "file:///home/ender/.claude/projects/job-search-automation/src/scrapers/glassdoor_scraper.js:360\n            const slug = encodeURIComponent(companyName.replace(/\\s+/g, '-'));\\n            const compan"
+  },
+  "LinkedIn (Dedicated)": {
+    "success": true,
+    "jobs_found": 0,
+    "is_demo_data": false,
+    "output_preview": "",
+    "error_preview": ""
+  }
+}
