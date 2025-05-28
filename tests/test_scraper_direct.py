@@ -12,9 +12,8 @@ Tests the Crawlee scraper directly via Node.js to debug:
 import subprocess
 import json
 import time
-import sys
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, Any
 
 class ScraperTester:
     def __init__(self, scraper_path: str = "src/crawlee-scraper.js"):
@@ -179,7 +178,7 @@ class ScraperTester:
                     
                     # Save raw output for debugging
                     debug_file = f"tests/results/scraper_debug_{int(time.time())}.json"
-                    Path("tests/results").mkdir(exist_ok=True)
+                    Path("tests/results").mkdir(parents=True, exist_ok=True)
                     with open(debug_file, 'w') as f:
                         json.dump(output_data, f, indent=2)
                     print(f"   Debug output saved: {debug_file}")

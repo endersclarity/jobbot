@@ -13,7 +13,7 @@ Tests all scraping API endpoints with various parameters to verify:
 import requests
 import json
 import time
-from typing import Dict, List, Any
+from typing import Dict, Any
 import sys
 from pathlib import Path
 
@@ -233,7 +233,7 @@ class APITester:
         print(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
         
         if failed_tests > 0:
-            print(f"\n🔥 FAILED TESTS:")
+            print("\n🔥 FAILED TESTS:")
             for result in self.results:
                 if not result["success"]:
                     print(f"  • {result['test']}: {result['details'].get('error', 'Unknown error')}")

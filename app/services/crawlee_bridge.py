@@ -122,7 +122,7 @@ class CrawleeBridge:
                         if 'success' in test_parse:  # This looks like our result
                             json_text = match
                             break
-                    except:
+                    except json.JSONDecodeError:
                         continue
                 
                 if not json_text:
