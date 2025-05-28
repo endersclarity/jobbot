@@ -340,6 +340,39 @@ async def get_supported_sites():
     }
 
 
+@router.post("/jobs/test")
+async def test_scraper_only(request: ScrapeJobsRequest):
+    """
+    🧪 Test scraper directly without database operations
+    
+    For debugging - returns raw scraper output without database save
+    """
+    try:
+        logger.info(f"🧪 Testing scraper: {request.search_term} in {request.location}")
+        
+        # Test scraper directly
+        result = await crawlee_bridge.scrape_jobs(
+            search_term=request.search_term,
+            location=request.location,
+            max_jobs=request.max_jobs,
+            job_site=request.job_site
+        )
+        
+        return {
+            "success": True,
+            "message": "Scraper test completed",
+            "scraper_result": result
+        }
+        
+    except Exception as e:
+        logger.error(f"Scraper test failed: {e}")
+        return {
+            "success": False, 
+            "error": str(e),
+            "message": "Scraper test failed"
+        }
+
+
 @router.get("/economics")
 async def get_cost_savings():
     """

@@ -73,10 +73,10 @@ class CrawleeBridge:
             cmd = [
                 "node", 
                 str(self.scraper_script),
-                f"--search={search_term}",
-                f"--location={location}",
-                f"--max={max_jobs}",
-                f"--site={job_site}",
+                "--search", search_term,
+                "--location", location,
+                "--max", str(max_jobs),
+                "--site", job_site,
                 "--json"
             ]
             
@@ -109,18 +109,34 @@ class CrawleeBridge:
             try:
                 stdout_text = stdout.decode('utf-8')
                 
-                # Find the JSON portion (starts with { and ends with })
-                json_start = stdout_text.rfind('{')
-                json_end = stdout_text.rfind('}') + 1
+                # Method 1: Find the JSON object by looking for complete JSON block
+                import re
+                json_pattern = r'\{(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*\}'
+                json_matches = re.findall(json_pattern, stdout_text, re.DOTALL)
                 
-                if json_start == -1 or json_end == 0:
-                    raise json.JSONDecodeError("No JSON found in output", stdout_text, 0)
+                # Look for the largest JSON object (likely our result)
+                json_text = None
+                for match in reversed(json_matches):  # Start from the end
+                    try:
+                        test_parse = json.loads(match)
+                        if 'success' in test_parse:  # This looks like our result
+                            json_text = match
+                            break
+                    except:
+                        continue
                 
-                json_text = stdout_text[json_start:json_end]
+                if not json_text:
+                    # Fallback: use the last complete JSON found
+                    if json_matches:
+                        json_text = json_matches[-1]
+                    else:
+                        raise json.JSONDecodeError("No valid JSON found in output", stdout_text, 0)
+                
                 result_data = json.loads(json_text)
                 
             except json.JSONDecodeError as e:
                 logger.error(f"Invalid JSON from scraper: {stdout.decode('utf-8')[:500]}")
+                logger.error(f"JSON extraction failed: {e}")
                 raise CrawleeIntegrationError(f"Invalid JSON response from scraper: {e}")
             
             # Validate result structure

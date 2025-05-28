@@ -146,9 +146,9 @@ class ScraperTester:
                 str(self.scraper_path),
                 "--search", search_term,
                 "--location", location,
-                "--max-jobs", str(max_jobs),
+                "--max", str(max_jobs),
                 "--site", "indeed",
-                "--debug"  # Enable debug output
+                "--json"  # Enable JSON output for parsing
             ]
             
             print(f"🔍 Running: {' '.join(args)}")
@@ -212,7 +212,7 @@ class ScraperTester:
         try:
             # Create a simple test script to check Indeed page structure
             test_script = '''
-const { chromium } = require('playwright');
+import { chromium } from 'playwright';
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
