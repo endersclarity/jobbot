@@ -1,169 +1,124 @@
 {
-  "project": {
-    "name": "JobBot - Business Intelligence Engine & Market Creation Platform",
-    "type": "python-fastapi-react-ai",
-    "description": "Complete business intelligence engine with AI-powered automation, real-time monitoring, and market creation pipeline",
-    "version": "3.3.0",
-    "status": "COMPLETE END-TO-END SYSTEM OPERATIONAL - Full Stack Functional with Demo Mode",
-    "repository": "https://github.com/endersclarity/jobbot",
-    "current_branch": "main"
+  "name": "Business Intelligence Engine (BIE)",
+  "description": "Transform traditional job search automation into proactive business opportunity creation through intelligent company research, automation potential detection, and personalized solution delivery.",
+  "version": "3.4.0",
+  "phase": "Phase 3B - Offline Processing & Data Pipeline Development",
+  "commands": {
+    "run-dev": "make run-dev",
+    "test": "make test", 
+    "lint": "make lint",
+    "format": "make format",
+    "init-db": "make init-db",
+    "migrate": "make migrate",
+    "build-dashboard": "cd dashboard && npm run build",
+    "dev-dashboard": "cd dashboard && npm run dev",
+    "scrape-demo": "npm run demo",
+    "scrape-all": "npm run scrape:all",
+    "init-ai": "/init",
+    "task-workflow": "/task",
+    "architect-setup": "/architect"
+  },
+  "keyBindings": {
+    "ctrl+shift+r": "run-dev",
+    "ctrl+shift+t": "test",
+    "ctrl+shift+l": "lint", 
+    "ctrl+shift+f": "format",
+    "ctrl+shift+d": "dev-dashboard",
+    "ctrl+shift+s": "scrape-demo",
+    "ctrl+shift+i": "init-ai",
+    "ctrl+shift+k": "task-workflow"
+  },
+  "directories": {
+    "src": "app/",
+    "tests": "tests/", 
+    "docs": "memory-bank/",
+    "frontend": "dashboard/src/",
+    "scrapers": "src/scrapers/",
+    "processed_data": "scraped_data/processed/",
+    "raw_data": "scraped_data/raw/"
   },
   "architecture": {
-    "backend": "FastAPI + SQLAlchemy + Alembic + WebSocket integration",
-    "frontend": "React 18 + Vite (Business Intelligence Dashboard) + Node.js + Crawlee + Playwright (enterprise scraping)",
-    "database": "PostgreSQL (production), SQLite (development)",
-    "ai_services": "Jinja2 templating + sentiment analysis + content generation",
-    "scraping": "Crawlee + Playwright (primary), BrowserMCP + requests (fallback)",
-    "testing": "pytest (Python), npm test (Node.js), React Testing Library",
-    "deployment": "Docker containerization + GitHub Actions CI/CD + Production infrastructure"
+    "backend": "FastAPI + PostgreSQL + Celery + Redis",
+    "frontend": "React + Vite + WebSocket",
+    "scraping": "Node.js + Crawlee + Playwright",
+    "ai_agents": "Architect + Taskmaster + AI Orchestration Protocol",
+    "data_pipeline": "Raw → Processed → Database Import → Analytics"
   },
-  "hdta_structure": {
-    "system_manifest": "memory-bank/system_manifest.md",
-    "modules": {
-      "api_core": "memory-bank/modules/module_api_core.md",
-      "scrapers": "memory-bank/modules/module_scrapers.md",
-      "database": "memory-bank/modules/module_database.md"
+  "modules": [
+    {
+      "name": "Data Collection",
+      "path": "memory-bank/modules/module_data_collection.md",
+      "status": "complete",
+      "description": "Web scraping and raw data aggregation"
     },
-    "implementations": {
-      "strategic_pivot": "memory-bank/implementations/implementation_strategic_pivot.md",
-      "phase_3b": "memory-bank/implementations/implementation_phase_3b.md"
+    {
+      "name": "Intelligence Analysis", 
+      "path": "memory-bank/modules/module_intelligence_analysis.md",
+      "status": "in_progress",
+      "description": "Transform raw data into actionable business intelligence"
     },
-    "roadmaps": {
-      "project_roadmap": "memory-bank/roadmaps/project_roadmap.md"
+    {
+      "name": "Opportunity Detection",
+      "path": "memory-bank/modules/module_opportunity_detection.md", 
+      "status": "planned",
+      "description": "Business opportunity identification and scoring"
+    },
+    {
+      "name": "Solution Generation",
+      "path": "memory-bank/modules/module_solution_generation.md",
+      "status": "planned", 
+      "description": "Proof-of-concept and demo creation"
+    },
+    {
+      "name": "Outreach Automation",
+      "path": "memory-bank/modules/module_outreach_automation.md",
+      "status": "planned",
+      "description": "Personalized communication and engagement tracking"
+    },
+    {
+      "name": "Dashboard Interface",
+      "path": "memory-bank/modules/module_dashboard_interface.md",
+      "status": "complete",
+      "description": "Real-time monitoring and analytics interface"
+    },
+    {
+      "name": "Database Infrastructure", 
+      "path": "memory-bank/modules/module_database_infrastructure.md",
+      "status": "complete",
+      "description": "PostgreSQL schema and data management"
     }
+  ],
+  "aiAgentOrchestration": {
+    "enabled": true,
+    "contextEngine": "/home/ender/.claude/orchestration/context_discovery.py",
+    "strategicDocs": "memory-bank/",
+    "tacticalIntegration": "taskmaster_context/",
+    "comprehensivePRD": "taskmaster_context/comprehensive_prd.md",
+    "contextSize": "98319",
+    "setupCommand": "/init",
+    "workflowCommand": "/task",
+    "bidirectionalSync": true
   },
-  "sync_targets": {
-    "active_context": "activeContext.md",
-    "changelog": "changelog.md",
-    "user_profile": "userProfile.md",
-    "project_standards": "CLAUDE.md",
-    "instructions": "INSTRUCTIONS.md"
-  },
-  "file_mappings": {
-    "context_files": [
-      "activeContext.md",
-      "changelog.md", 
-      "userProfile.md"
+  "currentFocus": {
+    "phase": "Phase 3B",
+    "priority": "Offline Processing & Data Pipeline",
+    "completedTasks": [
+      "Database Schema for Phase 3B Job Processing",
+      "HTML Parser and Data Extractor"
     ],
-    "documentation": [
-      "README.md",
-      "INSTRUCTIONS.md",
-      "development_roadmap.md",
-      "comprehensive_design.md"
+    "nextTasks": [
+      "Data Normalization Pipeline",
+      "Duplicate Detection System", 
+      "Data Quality Monitor",
+      "Batch Processing System",
+      "Database Import System"
     ],
-    "memory_bank": [
-      "memory-bank/system_manifest.md",
-      "memory-bank/modules/",
-      "memory-bank/implementations/",
-      "memory-bank/roadmaps/"
-    ],
-    "project_config": [
-      "CLAUDE.md",
-      "requirements.txt",
-      "pytest.ini",
-      "alembic.ini"
-    ]
+    "tasksProgress": "2/10 complete (20%)",
+    "workflowCommand": "/task"
   },
-  "commands": {
-    "test": "pytest",
-    "lint": "flake8 app/ tests/",
-    "format": "black app/ tests/ && isort app/ tests/",
-    "type_check": "mypy app/",
-    "run_dev": "uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
-    "db_migrate": "alembic upgrade head",
-    "db_revision": "alembic revision --autogenerate"
-  },
-  "mcp_servers": {
-    "enabled": [
-      "desktop-commander",
-      "sequential-thinking", 
-      "exa",
-      "browsermcp",
-      "context7"
-    ],
-    "primary_scraper": "browsermcp",
-    "fallback_scraper": "puppeteer"
-  },
-  "development": {
-    "current_phase": "COMPLETE SYSTEM OPERATIONAL - Full End-to-End Pipeline with Testing Infrastructure",
-    "completed_phases": [
-      "Phase 1 - Foundation & Database Setup",
-      "Phase 2 - Core API & Basic Job Management", 
-      "Phase 3A - Raw Data Collection",
-      "Phase 3B - HDTA Architecture & Memory Bank",
-      "Phase 3C - Crawlee Domination Infrastructure (Merged to Main)",
-      "Phase 4 - Crawlee-FastAPI Integration (Merged to Main)",
-      "Phase 5A - Multi-Site Scraping Foundation (Merged to Main)",
-      "Phase 5B - Real-Time Monitoring Dashboard (Merged to Main)",
-      "Phase 6 - Production Deployment & Enterprise Infrastructure (Merged to Main)",
-      "Phase 7 - Advanced Business Development & Analytics (Merged to Main)",
-      "Phase 8A - Analytics API Implementation (Merged to Main)",
-      "Phase 8B - Business Intelligence Engine Core (Merged via PR #10)",
-      "Phase 9 - Testing Infrastructure & Complete System Integration (CURRENT)"
-    ],
-    "next_milestone": "Production Deployment with Real Job Source Integration or Advanced Anti-Bot Bypass",
-    "strategic_direction": "Complete business intelligence platform for automated market creation and opportunity development with advanced analytics"
-  },
-  "git_workflow": {
-    "main_branch": "main",
-    "feature_prefix": "feature/",
-    "commit_format": "conventional",
-    "requires_pr": true,
-    "code_review": "codeRABBIT",
-    "auto_merge": false
-  },
-  "quality_gates": {
-    "test_coverage_min": 90,
-    "linting_required": true,
-    "type_checking_required": true,
-    "pr_review_required": true,
-    "ci_checks_required": true
-  },
-  "metadata": {
-    "created": "2025-05-25T18:45:00Z",
-    "last_updated": "2025-05-27T19:30:00Z",
-    "last_sync": "2025-05-27T19:30:00Z",
-    "last_load": "2025-05-27T15:00:00Z",
-    "architect_version": "1.0",
-    "hdta_complete": true,
-    "crawlee_complete": true,
-    "phase_3c_merged": true,
-    "sync_sessions": 13,
-    "last_commit": "6d20fd3",
-    "phase_4_complete": true,
-    "crawlee_fastapi_integrated": true,
-    "phase_5a_complete": true,
-    "phase_5b_complete": true,
-    "multi_site_architecture_built": true,
-    "business_intelligence_engine_built": true,
-    "business_intelligence_mvp_complete": true,
-    "real_time_monitoring_implemented": true,
-    "ai_automation_integrated": true,
-    "demo_generation_pipeline_complete": true,
-    "outreach_automation_complete": true,
-    "monitoring_dashboard_built": true,
-    "strategic_transformation_complete": true,
-    "test_coverage": "66.7%",
-    "bie_core_systems_validated": true,
-    "phase_6_complete": true,
-    "containerization_complete": true,
-    "cicd_pipeline_implemented": true,
-    "production_infrastructure_deployed": true,
-    "production_ready": true,
-    "phase_7_complete": true,
-    "phase_8_analytics_api_complete": true,
-    "phase_8_business_intelligence_complete": true,
-    "analytics_api_complete": true,
-    "business_intelligence_engine_integration": "complete",
-    "integration_status": "successfully_merged",
-    "pr_10_merged": true,
-    "platform_transformation_complete": true,
-    "testing_infrastructure_complete": true,
-    "end_to_end_system_operational": true,
-    "dashboard_api_integration_working": true,
-    "demo_mode_implemented": true,
-    "json_parsing_fixed": true,
-    "anti_bot_protection_analysis_complete": true,
-    "phase_9_system_integration_complete": true
+  "strategicEvolution": {
+    "originalVision": "Traditional job search automation", 
+    "currentVision": "Proactive business opportunity creation",
+    "futureVision": "AI-powered market creation and client acquisition"
   }
 }
