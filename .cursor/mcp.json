@@ -18,6 +18,13 @@
                 "AZURE_OPENAI_API_KEY": "AZURE_OPENAI_API_KEY_HERE",
                 "OLLAMA_API_KEY": "OLLAMA_API_KEY_HERE"
             }
+        },
+        "github": {
+            "command": "/home/ender/.npm-global/bin/mcp-server-github",
+            "args": [],
+            "env": {
+                "GITHUB_PERSONAL_ACCESS_TOKEN": "GITHUB_TOKEN_FROM_ENV"
+            }
         }
     }
 }
