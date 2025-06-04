@@ -5,6 +5,7 @@ Quick test to see which job sites are actually scrapable
 import subprocess
 import json
 import time
+from pathlib import Path
 
 def test_site_scraping():
     """Test scraping across different job sites"""
@@ -77,7 +78,7 @@ def test_site_scraping():
                             if jobs_found > 0:
                                 is_demo = any("Demo" in job.get('title', '') for job in data['jobs'])
                             break
-                    except json.JSONDecodeError:
+                    except:
                         continue
                 
                 results[site_test['name']] = {
@@ -187,7 +188,7 @@ def test_site_scraping():
     with open('site_scraping_results.json', 'w') as f:
         json.dump(results, f, indent=2)
     
-    print("\n💾 Detailed results saved to site_scraping_results.json")
+    print(f"\n💾 Detailed results saved to site_scraping_results.json")
     
     return working_sites, demo_only_sites, broken_sites
 
@@ -197,4 +198,4 @@ if __name__ == "__main__":
     if working:
         print(f"\n🎉 SUCCESS: We can scrape real jobs from: {', '.join(working)}")
     else:
-        print("\n😞 No sites provide real job data - all are blocked or demo-only")
+        print(f"\n😞 No sites provide real job data - all are blocked or demo-only")
