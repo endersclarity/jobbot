@@ -4,7 +4,8 @@ import {
   Database, 
   Globe, 
   TrendingUp, 
-  AlertTriangle
+  AlertTriangle,
+  FileText
 } from 'lucide-react'
 import { useRealTimeMetrics, useOrchestratorStatus } from '../hooks/useRealTimeMetrics'
 import { monitoringApi, jobsApi } from '../services/api'
@@ -233,10 +234,10 @@ function Dashboard() {
               <Activity className="h-5 w-5" />
               <span>Start New Session</span>
             </button>
-            <button className="btn btn-secondary flex items-center justify-center space-x-2 p-4">
-              <Database className="h-5 w-5" />
-              <span>View All Jobs</span>
-            </button>
+            <a href="/analysis" className="btn btn-secondary flex items-center justify-center space-x-2 p-4">
+              <FileText className="h-5 w-5" />
+              <span>Analyze Jobs</span>
+            </a>
             <button className="btn btn-secondary flex items-center justify-center space-x-2 p-4">
               <AlertTriangle className="h-5 w-5" />
               <span>Check Errors</span>

@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import Dashboard from './components/Dashboard'
 import JobScraper from './components/JobScraper'
+import JobAnalysis from './components/JobAnalysis'
 import ScrapingSessions from './components/ScrapingSessions'
 import Analytics from './components/Analytics'
 import Settings from './components/Settings'
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/scrape" element={<JobScraper />} />
+        <Route path="/analysis" element={<JobAnalysis />} />
         <Route path="/sessions" element={<ScrapingSessions />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
