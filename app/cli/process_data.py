@@ -16,6 +16,7 @@ import logging
 from app.processing.batch_processor import BatchProcessor
 from app.processing.db_importer import DatabaseImporter
 from app.processing.quality_monitor import QualityMonitor
+from app.processing.company_data_importer import CompanyDataImporter
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -290,3 +291,70 @@ def process_files(files, batch_name):
 
 if __name__ == "__main__":
     cli()
+
+
+@cli.command()
+@click.argument("file_path")
+@click.option("--batch-id", help="Custom import batch ID (optional, for logging or future use)")
+def import_company_intel(file_path, batch_id):
+    """Import processed company intelligence data to database."""
+    if not Path(file_path).exists():
+        click.echo(f"Error: File {file_path} not found", err=True)
+        sys.exit(1)
+
+    click.echo(f"Importing company intelligence from: {file_path}")
+
+    # Use a try-finally block to ensure db session is closed if importer manages it
+    importer = CompanyDataImporter() # Manages its own session by default
+    try:
+        # Assuming the company intelligence JSON contains one company's data per file
+        # If it can contain multiple, the logic here and in the importer needs adjustment
+        with open(file_path, "r") as f:
+            company_intel_data = json.load(f)
+
+        results = importer.import_company_intelligence(company_intel_data)
+
+        if results.get("status") == "error":
+            click.echo(f"Import failed: {results.get('message', 'Unknown error')}", err=True)
+            # Optionally print more details from results if available
+            if importer.import_stats["errors"]:
+                click.echo("Specific errors:")
+                for err_detail in importer.import_stats["errors"][:5]: # Show first 5 errors
+                    click.echo(f"  - Company: {err_detail.get('company_name', 'N/A')}, Error: {err_detail.get('error')}")
+            sys.exit(1)
+
+        # Display import results
+        click.echo("\n" + "=" * 50)
+        click.echo("COMPANY INTELLIGENCE IMPORT RESULTS")
+        click.echo("=" * 50)
+        click.echo(f"File processed: {file_path}")
+        click.echo(f"Company: {company_intel_data.get('company_name', 'N/A')} (Domain: {company_intel_data.get('company_domain', 'N/A')})")
+        action = results.get("action", "unknown")
+        if action == "created":
+            click.echo(f"Status: New company record created (ID: {results.get('company_id')})")
+            click.echo(f"Companies created: {importer.import_stats['companies_created']}")
+        elif action == "updated":
+            click.echo(f"Status: Existing company record updated (ID: {results.get('company_id')})")
+            click.echo(f"Companies updated: {importer.import_stats['companies_updated']}")
+        else:
+            click.echo(f"Status: {action}")
+
+        click.echo(f"Related BI records created/updated: {importer.import_stats['related_records_created']}")
+
+        if importer.import_stats["errors"]:
+            click.echo(f"\nErrors during import: {len(importer.import_stats['errors'])}")
+            # Errors already printed above if import failed at top level
+
+        click.echo(f"Import batch ID (example): {batch_id if batch_id else 'generated_timestamp'}")
+
+
+    except json.JSONDecodeError as e:
+        click.echo(f"Error decoding JSON from file {file_path}: {e}", err=True)
+        sys.exit(1)
+    except Exception as e:
+        click.echo(f"An unexpected error occurred: {e}", err=True)
+        logger.error(f"Unexpected CLI import error for {file_path}: {e}", exc_info=True)
+        sys.exit(1)
+    finally:
+        if importer._db_session_managed_internally: # Ensure session is closed
+             importer.db.close()

@@ -22,6 +22,12 @@ from app.models.business_intelligence import (
 from app.services.demo_generator import DemoGenerator, create_demo_for_opportunity
 from app.services.outreach_generator import OutreachMessageGenerator
 from pydantic import BaseModel, Field
+import logging # Added for logger
+
+from app.processing.company_data_importer import CompanyDataImporter # Added import
+
+
+logger = logging.getLogger(__name__) # Added logger
 
 
 # Pydantic models for API requests/responses
@@ -48,6 +54,105 @@ class CompanyResponse(BaseModel):
     
     class Config:
         from_attributes = True
+
+
+# Pydantic Model for Company Intelligence Submission
+class LLMCompanyIntelligencePayload(BaseModel):
+    company_name: str = Field(..., description="Official company name")
+    company_domain: str = Field(..., description="Primary website domain (used for matching)")
+    website_url: Optional[str] = Field(None, description="Full website URL")
+    description_summary: Optional[str] = Field(None, description="LLM-generated summary of what the company does")
+    industry_tags: Optional[List[str]] = Field(default_factory=list, description="List of industry tags/keywords identified by LLM")
+
+    class LocationInfo(BaseModel):
+        full_address: Optional[str] = None
+        city: Optional[str] = None
+        state: Optional[str] = None
+        country: Optional[str] = None
+        zip_code: Optional[str] = None
+    location_info: Optional[LocationInfo] = Field(default_factory=dict)
+
+    class SizeInfo(BaseModel):
+        employee_count_text: Optional[str] = None
+        revenue_range_text: Optional[str] = None
+    size_info: Optional[SizeInfo] = Field(default_factory=dict)
+
+    class SocialMediaLinks(BaseModel):
+        linkedin: Optional[str] = None
+        github_org: Optional[str] = None
+        twitter: Optional[str] = None
+        facebook: Optional[str] = None
+        # Using Dict for additional flexibility as Pydantic v1 doesn't easily support arbitrary extra fields
+        # in the same way as v2's model_extra.
+    social_media_links: Optional[Dict[str, Optional[str]]] = Field(default_factory=dict)
+
+    class ObservedTech(BaseModel):
+        name: str
+        category: Optional[str] = None
+        notes: Optional[str] = None
+        class Config:
+            from_attributes = True
+    observed_tech_stack: Optional[List[ObservedTech]] = Field(default_factory=list)
+
+    class IdentifiedPainPoint(BaseModel):
+        description: str
+        source_quote: Optional[str] = None
+        severity_guess: Optional[str] = None # e.g., "low", "medium", "high"
+        class Config:
+            from_attributes = True
+    identified_pain_points: Optional[List[IdentifiedPainPoint]] = Field(default_factory=list)
+
+    class PotentialOpportunity(BaseModel):
+        type: str
+        description: str
+        value_proposition: Optional[str] = None
+        class Config:
+            from_attributes = True
+    potential_opportunities: Optional[List[PotentialOpportunity]] = Field(default_factory=list)
+
+    class KeyPersonnel(BaseModel):
+        name: str
+        title: Optional[str] = None
+        email: Optional[str] = None
+        linkedin_url: Optional[str] = None
+        notes: Optional[str] = None
+        class Config:
+            from_attributes = True
+    key_personnel: Optional[List[KeyPersonnel]] = Field(default_factory=list)
+
+    class WebsiteAuditObservations(BaseModel):
+        overall_impression: Optional[str] = None
+        mobile_friendliness_observed: Optional[str] = None
+        performance_notes: Optional[str] = None
+        security_notes: Optional[str] = None
+        class Config:
+            from_attributes = True
+    website_audit_observations: Optional[WebsiteAuditObservations] = Field(default_factory=dict)
+
+    source_urls_visited: List[str] = Field(..., description="List of URLs visited for this intelligence")
+    session_notes: Optional[str] = Field(None, description="Overall notes from the LLM/human operator")
+
+    class Config:
+        from_attributes = True # For Pydantic v2, enables ORM mode
+        json_schema_extra = {
+            "example": {
+                "company_name": "Innovate Corp LLM",
+                "company_domain": "innovatecorp-llm.com",
+                "website_url": "https://innovatecorp-llm.com",
+                "description_summary": "AI solutions for healthcare.",
+                "industry_tags": ["AI", "Healthcare"],
+                "location_info": {"city": "San Francisco", "state": "CA"},
+                "size_info": {"employee_count_text": "Approx. 150"},
+                "social_media_links": {"linkedin": "https://linkedin.com/company/innovatecorp-llm"},
+                "observed_tech_stack": [{"name": "React", "category": "Framework"}],
+                "identified_pain_points": [{"description": "Scaling challenges for DevOps."}],
+                "potential_opportunities": [{"type": "DevOps Consulting", "description": "Scaling issues imply need."}],
+                "key_personnel": [{"name": "Dr. Alice Quantum", "title": "CEO"}],
+                "website_audit_observations": {"overall_impression": "Modern site."},
+                "source_urls_visited": ["https://innovatecorp-llm.com/about"],
+                "session_notes": "Initial LLM pass."
+            }
+        }
 
 
 class OpportunityCreate(BaseModel):
@@ -828,3 +933,39 @@ async def simulate_email_send(email: str, message_data: Dict[str, Any]):
     await asyncio.sleep(1)  # Simulate email service delay
     print(f"Email sent to {email}: {message_data['subject']}")
     return True
+
+
+@router.post("/companies/import-intelligence", response_model=Dict[str, Any])
+async def import_company_intelligence_endpoint(
+    intel_payload: LLMCompanyIntelligencePayload,
+    db: Session = Depends(get_db)
+):
+    """
+    Receives LLM-scraped company intelligence data and imports it into the database.
+    This endpoint is for online, single-company submissions.
+    """
+    importer = CompanyDataImporter(db_session=db) # Use the injected session
+    try:
+        # The Pydantic model automatically converts to dict for the importer
+        # Assuming Pydantic v2 given `from_attributes = True` in other models
+        result = importer.import_company_intelligence(intel_payload.model_dump())
+
+        if result.get("status") == "error":
+            # Log the detailed error from importer if possible
+            logger.error(f"Error importing company intelligence via API for {intel_payload.company_domain}: {result.get('message')}")
+            # Check importer stats for more details if needed
+            # specific_errors = importer.import_stats.get("errors", [])
+            raise HTTPException(status_code=400, detail=f"Import failed: {result.get('message')}")
+
+        # Successfully created or updated
+        return {
+            "message": f"Company intelligence for '{intel_payload.company_name}' processed.",
+            "action": result.get("action"),
+            "company_id": result.get("company_id"),
+            "stats": importer.import_stats # Return stats from this specific operation
+        }
+    except HTTPException: # Re-raise HTTPExceptions
+        raise
+    except Exception as e:
+        logger.error(f"API endpoint /companies/import-intelligence failed for {intel_payload.company_domain}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
